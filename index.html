@@ -1,152 +1,14 @@
-<!DOCTYPE html>
-<html lang="da">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=800, initial-scale=1.0">
-
-<style>
-body { margin:0; }
-
-.banner {
-  width:620px;
-  height:200px;
-  position:relative;
-  overflow:hidden;
-  font-family:Arial, sans-serif;
-  background:url('bg.jpg') center/cover no-repeat;
-}
-
-/* LOGO */
-.logo {
-  position:absolute;
-  z-index:5;
-  transition: all 1s ease;
-}
-
- .logoStart {
-  width:100px;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  opacity:0;   /* 🔥 vigtig */
-.logoStart {
-  animation: logoFadeIn 0.4s ease forwards;
-}
-
-@keyframes logoFadeIn {
-  to { opacity:1; }
-}
- }
-
-.logoEnd {
-  width:130px;
-  right:10px;
-  bottom:10px;
-  top:auto;
-  left:auto;
-  transform:none;
-}
-
-/* OVERLAY */
-.overlay {
-  position:absolute;
-  top:0;
-  right:-100%;
-  width:100%;
-  height:100%;
-  background:rgba(0,80,40,0.75);
-  z-index:2;
-  transition:right 0.8s ease;
-}
-
-.overlayShow { right:0; }
-
-/* TEXT */
-.textWrap {
-  position:absolute;
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  z-index:3;
-}
-
-.text {
-  position:absolute;
-  color:#fff;
-  font-size:36px;
-  font-weight:bold;
-  max-width:650px;
-  padding:0 40px;
-  opacity:0;
-}
-
-/* STANDARD */
-.fade {
-  animation:fadeScale 2.2s ease forwards;
-}
-
-@keyframes fadeScale {
-  0% { transform:scale(1.3); opacity:0; }
-  20% { opacity:1; }
-  80% { opacity:1; }
-  100% { opacity:0; }
-}
-
-/* 50 mio */
-.bigText {
-  animation: bigSequence 5.5s ease forwards;
-}
-
-@keyframes bigSequence {
-  0% { opacity:0; transform:scale(1.2); }
-  15% { opacity:1; transform:scale(1); }
-  65% { opacity:1; transform:scale(1); }
-  100% { opacity:0; transform:scale(2); }
-}
-}
-
-@keyframes bigSequence {
-  0% { opacity:0; transform:scale(1.2); }
-  15% { opacity:1; }
-  60% { opacity:1; }
-  100% { opacity:0; transform:scale(2); }
-}
-
-/* CTA */
-.cta {
-  font-size:22px;
-  line-height:1.4;
-  animation:ctaAnim 8s ease forwards;
-}
-
-@keyframes ctaAnim {
-  0% { opacity:0; }
-  10% { opacity:1; }
-  90% { opacity:1; }
-  100% { opacity:0; }
-}
-</style>
-</head>
-
-<body>
-
-<div class="banner">
-
-  <img src="SPAX-logo-NY.jpg" class="logo logoStart" id="logo">
-  <div class="overlay" id="overlay"></div>
-  <div class="textWrap" id="wrap"></div>
-
-</div>
-
 <script>
 
 let timers = [];
 
+const link = "https://www.spax.com/sv-sv.html";
+
+document.querySelector(".banner").onclick = function(){
+  window.open(link, "_blank");
+};
+
 const texts = [
-  "Tyske kvalitetsskruer",
   "Terrasseskruer",
   "Konstruktionsskruer",
   "Facadeskruer",
@@ -166,7 +28,6 @@ function reset(){
   const logo = document.getElementById("logo");
   logo.className = "logo logoStart";
 
-  /* force repaint */
   logo.offsetHeight;
 }
 
@@ -179,18 +40,12 @@ function start(){
   const overlay = document.getElementById("overlay");
 
   /* logo animation */
-  // 🔥 vis logo fuldt først
-timers.push(setTimeout(()=>{
-  logo.className = "logo logoStart";
-}, 0));
-
-// 🔥 vent lidt (så det ligner første load)
-timers.push(setTimeout(()=>{
-  logo.classList.replace("logoStart","logoEnd");
-}, 600)); // 👈 vigtig (var 200)
+  timers.push(setTimeout(()=>{
+    logo.classList.replace("logoStart","logoEnd");
+  }, 600));
 
   let startDelay = 2200;
-  let delay = 2500;
+  let delay = 1600;
 
   texts.forEach((t,i)=>{
     timers.push(setTimeout(()=>showText(t), startDelay + i*delay));
@@ -204,9 +59,9 @@ timers.push(setTimeout(()=>{
     showBig("Vi producerer over 50 millioner skruer dagligt.");
   }, startDelay + texts.length*delay + 800));
 
- timers.push(setTimeout(()=>{
-  showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
-}, startDelay + texts.length*delay + 7000));
+  timers.push(setTimeout(()=>{
+    showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
+  }, startDelay + texts.length*delay + 7000));
 
   timers.push(setTimeout(()=>{
     start();
@@ -244,6 +99,3 @@ function showCTA(txt){
 start();
 
 </script>
-
-</body>
-</html>
