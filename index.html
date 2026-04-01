@@ -1,5 +1,9 @@
 <script>
-
+  
+document.getElementById("banner").onclick = function(){
+  window.open("https://www.spax.com/sv-sv.html", "_blank");
+};
+  
 let timers = [];
 
 const link = "https://www.spax.com/sv-sv.html";
@@ -97,5 +101,13 @@ function showCTA(txt){
 }
 
 start();
-
+  
+window.onload = function(){
+  const banner = document.getElementById("banner");
+  if(banner){
+    banner.onclick = function(){
+      window.open("https://www.spax.com/sv-sv.html", "_blank");
+    };
+  }
+};
 </script>
