@@ -146,7 +146,7 @@ body { margin:0; }
 let timers = [];
 
 const texts = [
-  "Tysk kvalitetsskruer",
+  "Tyske kvalitetsskruer",
   "Terrasseskruer",
   "Konstruktionsskruer",
   "Facadeskruer",
@@ -190,7 +190,7 @@ timers.push(setTimeout(()=>{
 }, 600)); // 👈 vigtig (var 200)
 
   let startDelay = 2200;
-  let delay = 2000;
+  let delay = 2500;
 
   texts.forEach((t,i)=>{
     timers.push(setTimeout(()=>showText(t), startDelay + i*delay));
