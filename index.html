@@ -5,122 +5,107 @@
 <meta name="viewport" content="width=800, initial-scale=1.0">
 
 <style>
-body { margin: 0; }
+body { margin:0; }
 
 .banner {
-  width: 800px;
-  height: 200px;
-  position: relative;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-  cursor: pointer;
-  background: url('bg.jpg') center/cover no-repeat;
+  width:800px;
+  height:200px;
+  position:relative;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+  cursor:pointer;
+  background:url('bg.jpg') center/cover no-repeat;
 }
 
 /* LOGO */
 .logo {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  width: 760px; /* næsten hele banner */
-  opacity: 0;
-  transform: scale(1);
-  animation: logoAnim 4s ease forwards;
+  position:absolute;
+  width:800px;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  animation:logoAnim 4s ease forwards;
 }
 
 @keyframes logoAnim {
   0% {
-    width: 800px;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
+    width:800px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
   }
   100% {
-    width: 180px;
-    right: 20px;
-    bottom: 20px;
-    opacity: 1;
+    width:170px;
+    top:auto;
+    left:auto;
+    right:20px;
+    bottom:20px;
+    transform:none;
   }
 }
 
 /* TEKST */
-.textContainer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  pointer-events: none;
+.textWrap {
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  pointer-events:none;
 }
 
 .text {
-  position: absolute;
-  color: #fff;
-  font-size: 38px;
-  font-weight: bold;
-  opacity: 0;
+  position:absolute;
+  color:#fff;
+  font-size:36px;
+  font-weight:bold;
+  max-width:700px;
+  opacity:0;
 }
 
-/* animation */
-.animateText {
-  animation: textAnim 2.5s ease forwards;
+.show {
+  animation:fadeScale 2.6s ease forwards;
 }
 
-@keyframes textAnim {
+@keyframes fadeScale {
   0% {
-    transform: scale(1.8);
-    opacity: 0;
+    transform:scale(1.6);
+    opacity:0;
   }
-  20% {
-    opacity: 1;
-  }
+  20% { opacity:1; }
   80% {
-    opacity: 1;
-    transform: scale(1);
+    opacity:1;
+    transform:scale(1);
   }
   100% {
-    opacity: 0;
-    transform: scale(0.9);
+    opacity:0;
+    transform:scale(0.9);
   }
 }
-
-/* CTA */
-.cta {
-  font-size: 24px;
-  opacity: 0;
-  animation: fadeIn 2s ease forwards;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="banner" onclick="clickBanner()" data-href="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen">
+<div class="banner" data-link="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen">
 
-  <!-- LOGO -->
   <img src="SPAX-logo-NY.jpg" class="logo">
 
-  <!-- TEKST -->
-  <div class="textContainer" id="textContainer"></div>
+  <div class="textWrap" id="textWrap"></div>
 
 </div>
 
 <script>
 
-function clickBanner() {
-  var url = document.querySelector('.banner').getAttribute('data-href');
-  window.location.href = url;
-}
+/* KLIK – virker i alle systemer */
+document.querySelector('.banner').addEventListener('click', function() {
+  window.top.location.href = this.getAttribute('data-link');
+});
+
+
+const wrap = document.getElementById('textWrap');
 
 const texts = [
   "Terrasseskruer",
@@ -130,38 +115,51 @@ const texts = [
   "Udendørs skruer"
 ];
 
-const container = document.getElementById("textContainer");
+let start = 4500; // starter efter logo
+let delay = 2300;
 
-let delay = 2200;
-
-/* LOOP TEKSTER */
-texts.forEach((txt, i) => {
+/* LILLE TEKSTER */
+texts.forEach((t, i) => {
   setTimeout(() => {
-    const el = document.createElement("div");
-    el.className = "text animateText";
-    el.innerText = txt;
-    container.innerHTML = "";
-    container.appendChild(el);
-  }, i * delay + 1000);
+    showText(t);
+  }, start + (i * delay));
 });
 
-/* STOR TEKST */
+/* 50 mio (længere) */
 setTimeout(() => {
-  const el = document.createElement("div");
-  el.className = "text animateText";
-  el.innerText = "Vi producerer over 50 millioner skruer dagligt.";
-  container.innerHTML = "";
-  container.appendChild(el);
-}, texts.length * delay + 1000);
+  showStatic("Vi producerer over 50 millioner skruer dagligt.", 3500);
+}, start + texts.length * delay);
 
-/* CTA */
+/* CTA (længere + samme stil) */
 setTimeout(() => {
+  showStatic("Kontakt Søren Dagø ved at klikke på banneret", 4000);
+}, start + texts.length * delay + 3500);
+
+
+/* FUNCTIONS */
+
+function showText(txt) {
   const el = document.createElement("div");
-  el.className = "cta";
-  el.innerText = "Kontakt Søren Dagø på 51 23 31 50 - denmark.info@spax.com - www.spax.com";
-  container.innerHTML = "";
-  container.appendChild(el);
-}, texts.length * delay + 3500);
+  el.className = "text show";
+  el.innerText = txt;
+
+  wrap.innerHTML = "";
+  wrap.appendChild(el);
+}
+
+function showStatic(txt, duration) {
+  const el = document.createElement("div");
+  el.className = "text";
+  el.style.opacity = "1";
+  el.innerText = txt;
+
+  wrap.innerHTML = "";
+  wrap.appendChild(el);
+
+  setTimeout(() => {
+    el.style.opacity = "0";
+  }, duration);
+}
 
 </script>
 
