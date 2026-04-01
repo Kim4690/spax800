@@ -125,7 +125,6 @@ body { margin:0; }
 
 const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
 
-/* CLICK */
 document.getElementById('banner').onclick = function(){
   try {
     window.top.location.href = link;
@@ -146,44 +145,59 @@ const texts = [
   "Udendørs skruer"
 ];
 
-function start() {
-
-  /* RESET */
+function resetBanner() {
   wrap.innerHTML = "";
   overlay.className = "overlay";
 
-  logo.className = "logo";
+  logo.className = "logo"; 
+  logo.style.width = "800px";
+  logo.style.top = "50%";
+  logo.style.left = "50%";
+  logo.style.right = "auto";
+  logo.style.bottom = "auto";
+  logo.style.transform = "translate(-50%, -50%)";
+}
+
+/* MAIN */
+function start() {
+
+  resetBanner();
+
+  /* force repaint */
   void logo.offsetWidth;
 
+  /* start logo */
   setTimeout(() => {
     logo.classList.add("logoSmall");
-  }, 50);
+  }, 100);
 
-  let startDelay = 3200; // hurtigere start
+  let startDelay = 3200;
   let delay = 2000;
 
-  /* TEKSTER */
   texts.forEach((t, i) => {
     setTimeout(() => showText(t), startDelay + i * delay);
   });
 
-  /* OVERLAY */
+  /* overlay */
   setTimeout(() => {
     overlay.classList.add("overlayShow");
   }, startDelay + texts.length * delay);
 
-  /* 50 mio (længere) */
+  /* 50 mio */
   setTimeout(() => {
     showBig("Vi producerer over 50 millioner skruer dagligt.");
   }, startDelay + texts.length * delay + 1000);
 
-  /* CTA (ny tekst + længere visning) */
+  /* CTA – længere */
   setTimeout(() => {
     showCTA("Vil du forhandle SPAX, kontakt Søren Dagø på 51 23 31 50 - soren.dago@spax.com - www.spax.com");
   }, startDelay + texts.length * delay + 6500);
 
-  /* LOOP (ingen pause) */
-  setTimeout(start, startDelay + texts.length * delay + 13000);
+  /* RESET + LOOP */
+  setTimeout(() => {
+    resetBanner();   // 🔥 vigtig!
+    start();         // start helt forfra
+  }, startDelay + texts.length * delay + 15000);
 }
 
 /* helpers */
@@ -205,7 +219,6 @@ function showCTA(txt) {
   const el = create(txt);
   el.classList.add("fade");
   el.classList.add("cta");
-
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
