@@ -89,7 +89,15 @@ body { margin:0; }
 
 /* 50 mio */
 .bigText {
-  animation:bigSequence 6s ease forwards;
+  animation: bigSequence 5.5s ease forwards;
+}
+
+@keyframes bigSequence {
+  0% { opacity:0; transform:scale(1.2); }
+  15% { opacity:1; transform:scale(1); }
+  65% { opacity:1; transform:scale(1); }
+  100% { opacity:0; transform:scale(2); }
+}
 }
 
 @keyframes bigSequence {
@@ -162,9 +170,15 @@ function start(){
   const overlay = document.getElementById("overlay");
 
   /* logo animation */
-  timers.push(setTimeout(()=>{
-    logo.classList.replace("logoStart","logoEnd");
-  }, 200));
+  // 🔥 vis logo fuldt først
+timers.push(setTimeout(()=>{
+  logo.className = "logo logoStart";
+}, 0));
+
+// 🔥 vent lidt (så det ligner første load)
+timers.push(setTimeout(()=>{
+  logo.classList.replace("logoStart","logoEnd");
+}, 600)); // 👈 vigtig (var 200)
 
   let startDelay = 2200;
   let delay = 2000;
