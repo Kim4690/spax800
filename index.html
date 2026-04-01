@@ -152,26 +152,24 @@ function reset(){
   wrap.innerHTML = "";
   overlay.className = "overlay";
 
-  /* 🔥 fjern logo helt */
-  const oldLogo = document.getElementById("logo");
-  oldLogo.remove();
+  /* 🔥 fjern ALLE logoer */
+  document.querySelectorAll("#logo").forEach(el => el.remove());
 
-  /* 🔥 opret nyt logo */
+  /* opret nyt logo */
   const newLogo = document.createElement("img");
   newLogo.src = "SPAX-logo-NY.jpg";
   newLogo.id = "logo";
   newLogo.className = "logo logoStart";
 
   document.querySelector(".banner").appendChild(newLogo);
-
 }
 
-function start(){
+  function start(){
 
   clearAll();
   reset();
 
-  const logo = document.getElementById("logo"); // 🔥 vigtigt
+  const logo = document.getElementById("logo");
 
   setTimeout(()=>{
     logo.classList.replace("logoStart","logoEnd");
