@@ -158,14 +158,12 @@ function start(){
   clearAll();
   reset();
 
-  void logo.offsetWidth;
+  logo.className = "logo logoStart";
 
-  requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      logo.classList.replace("logoStart","logoEnd");
-    }, 300); // lidt længere delay
-  });
+  /* vigtig – lad browser tegne først */
+  setTimeout(() => {
+  logo.classList.replace("logoStart","logoEnd");
+  }, 200);
 
   let startDelay = 2200;
   let delay = 2000;
