@@ -177,7 +177,20 @@ function reset(){
   clearAll();
   reset();
 
-  const logo = document.getElementById("logo"); // ✔ kun her
+ function reset(){
+
+  wrap.innerHTML = "";
+  overlay.className = "overlay";
+
+  const banner = document.getElementById("banner");
+
+  /* 🔥 fjern ALT indhold og byg op igen */
+  banner.innerHTML = `
+    <img src="SPAX-logo-NY.jpg" class="logo logoStart" id="logo">
+    <div class="overlay" id="overlay"></div>
+    <div class="textWrap" id="wrap"></div>
+  `;
+}
 
   // 🔥 tving korrekt start
 logo.classList.remove("logoEnd");
