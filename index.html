@@ -1,1 +1,188 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=800, initial-scale=1.0">
+<title>SPAX Banner</title>
 
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .banner {
+    width: 800px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+
+    background: url('bg.jpg') center/cover no-repeat;
+  }
+
+  /* LOGO */
+  .logo {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) scale(1.6);
+    opacity: 0;
+    animation: logoAnim 2s ease forwards;
+  }
+
+  @keyframes logoAnim {
+    0% {
+      transform: translateY(-50%) scale(1.6);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(-50%) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* TEKST FELT */
+  .text {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  .word {
+    opacity: 0;
+    position: absolute;
+    white-space: nowrap;
+  }
+
+  /* Fade animation */
+  .fadeInOut {
+    animation: fadeInOut 2.5s ease forwards;
+  }
+
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* STOR TEKST */
+  .bigText {
+    opacity: 0;
+    font-size: 36px;
+    max-width: 500px;
+    line-height: 1.2;
+  }
+
+  .scaleIn {
+    animation: scaleIn 2s ease forwards;
+  }
+
+  @keyframes scaleIn {
+    0% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .fadeOut {
+    animation: fadeOut 2s ease forwards;
+  }
+
+  @keyframes fadeOut {
+    to { opacity: 0; }
+  }
+
+  .cta {
+    opacity: 0;
+    font-size: 22px;
+    animation: fadeIn 2s ease forwards;
+    animation-delay: 12s;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+</style>
+</head>
+
+<body>
+
+<a href="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen">
+  <div class="banner">
+
+    <!-- LOGO -->
+    <img src="spax-logo.png" class="logo" width="180">
+
+    <!-- TEKST -->
+    <div class="text" id="textContainer"></div>
+
+  </div>
+</a>
+
+<script>
+
+const words = [
+  "Terrasseskruer",
+  "Konstruktionsskruer",
+  "Facadeskruer",
+  "Indendørs skruer",
+  "Udendørs skruer"
+];
+
+const container = document.getElementById("textContainer");
+
+let delay = 2000;
+
+words.forEach((word, index) => {
+  setTimeout(() => {
+    const el = document.createElement("div");
+    el.className = "word fadeInOut";
+    el.innerText = word;
+    container.innerHTML = "";
+    container.appendChild(el);
+  }, index * delay);
+});
+
+// STOR TEKST
+setTimeout(() => {
+  container.innerHTML = "";
+
+  const el = document.createElement("div");
+  el.className = "bigText scaleIn";
+  el.innerText = "Vi producerer over 50 millioner skruer dagligt.";
+  container.appendChild(el);
+
+  // fade ud igen
+  setTimeout(() => {
+    el.classList.add("fadeOut");
+  }, 2500);
+
+}, words.length * delay);
+
+// CTA tekst
+setTimeout(() => {
+  container.innerHTML = "";
+
+  const el = document.createElement("div");
+  el.className = "cta";
+  el.innerText = "Kontakt Søren Dagø ved at klikke på banneret";
+  container.appendChild(el);
+
+}, words.length * delay + 4000);
+
+</script>
+
+</body>
+</html>
