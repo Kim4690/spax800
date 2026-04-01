@@ -173,9 +173,18 @@ function reset(){
 
   const logo = document.getElementById("logo"); // ✔ kun her
 
-  setTimeout(()=>{
-    logo.classList.replace("logoStart","logoEnd");
-  },200);
+  // 🔥 tving korrekt start
+logo.classList.remove("logoEnd");
+logo.classList.add("logoStart");
+
+/* force repaint */
+logo.getBoundingClientRect();
+
+/* start animation */
+setTimeout(()=>{
+  logo.classList.remove("logoStart");
+  logo.classList.add("logoEnd");
+}, 300);
 
   let startDelay = 2200;
   let delay = 2000;
