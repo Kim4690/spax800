@@ -77,7 +77,7 @@ body { margin:0; }
   opacity:0;
 }
 
-/* standard tekst */
+/* STANDARD */
 .fade {
   animation:fadeScale 2.2s ease forwards;
 }
@@ -89,29 +89,29 @@ body { margin:0; }
   100% { opacity:0; }
 }
 
-/* 50 mio */
-.fadeZoom {
-  animation:fadeZoom 4s ease forwards;
+/* 50 mio – NY */
+.bigText {
+  animation:bigSequence 6s ease forwards;
 }
 
-@keyframes fadeZoom {
-  0% { transform:scale(1.2); opacity:0; }
-  20% { opacity:1; }
-  75% { opacity:1; }
-  100% { transform:scale(2); opacity:0; }
+@keyframes bigSequence {
+  0% { opacity:0; transform:scale(1.2); }
+  15% { opacity:1; transform:scale(1); }
+  60% { opacity:1; transform:scale(1); }
+  100% { opacity:0; transform:scale(2); }
 }
 
-/* CTA (LANGERE) */
+/* CTA */
 .cta {
   font-size:22px;
   line-height:1.4;
-  animation:ctaAnim 6s ease forwards;
+  animation:ctaAnim 8s ease forwards;
 }
 
 @keyframes ctaAnim {
   0% { opacity:0; transform:scale(1.2); }
   10% { opacity:1; }
-  85% { opacity:1; }
+  90% { opacity:1; }
   100% { opacity:0; }
 }
 
@@ -121,11 +121,9 @@ body { margin:0; }
 <body>
 
 <div class="banner" id="banner">
-
   <img src="SPAX-logo-NY.jpg" class="logo logoStart" id="logo">
   <div class="overlay" id="overlay"></div>
   <div class="textWrap" id="wrap"></div>
-
 </div>
 
 <script>
@@ -166,7 +164,7 @@ function start(){
     logo.classList.replace("logoStart","logoEnd");
   },100));
 
-  let startDelay = 2200; // 🔥 hurtigere start
+  let startDelay = 2200;
   let delay = 2000;
 
   texts.forEach((t,i)=>{
@@ -183,15 +181,15 @@ function start(){
     showBig("Vi producerer over 50 millioner skruer dagligt.");
   }, startDelay + texts.length*delay + 800));
 
-  /* CTA */
+  /* CTA (længere!) */
   timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX, kontakt Søren Dagø på 51 23 31 50 - soren.dago@spax.com - www.spax.com");
-  }, startDelay + texts.length*delay + 5000));
+  }, startDelay + texts.length*delay + 7000));
 
-  /* RESTART (ingen pause!) */
+  /* RESTART – præcis når CTA er færdig */
   timers.push(setTimeout(()=>{
     start();
-  }, startDelay + texts.length*delay + 11000));
+  }, startDelay + texts.length*delay + 15000));
 }
 
 /* helpers */
@@ -204,7 +202,7 @@ function showText(txt){
 
 function showBig(txt){
   const el = create(txt);
-  el.classList.add("fadeZoom");
+  el.classList.add("bigText");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
