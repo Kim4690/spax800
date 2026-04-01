@@ -17,7 +17,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* LOGO (ingen CSS animation!) */
+/* LOGO */
 .logo {
   position:absolute;
   width:800px;
@@ -28,7 +28,6 @@ body { margin:0; }
   transition: all 1.2s ease;
 }
 
-/* slut position */
 .logoSmall {
   width:170px;
   top:auto;
@@ -45,9 +44,9 @@ body { margin:0; }
   right:-100%;
   width:100%;
   height:100%;
-  background:rgba(0, 80, 40, 0.75);
+  background:rgba(0,80,40,0.75);
   z-index:2;
-  transition: right 1s ease;
+  transition:right 1s ease;
 }
 
 .overlayShow {
@@ -77,7 +76,7 @@ body { margin:0; }
   opacity:0;
 }
 
-/* standard tekst */
+/* STANDARD */
 .fade {
   animation:fadeScale 2.5s ease forwards;
 }
@@ -106,6 +105,7 @@ body { margin:0; }
   font-size:22px;
   line-height:1.4;
 }
+
 </style>
 </head>
 
@@ -123,11 +123,16 @@ body { margin:0; }
 
 <script>
 
-/* ✅ CLICK (fixet korrekt) */
-document.getElementById('banner').onclick = function() {
-  const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
-  window.open(link, "_top");
-};
+const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
+
+/* 🔥 ROBUST CLICK */
+document.getElementById('banner').addEventListener('click', function(){
+  try {
+    window.top.location.href = link;
+  } catch(e) {
+    window.open(link);
+  }
+});
 
 const wrap = document.getElementById("wrap");
 const logo = document.getElementById("logo");
@@ -143,26 +148,30 @@ const texts = [
 
 function start() {
 
-  /* RESET */
+  /* RESET ALT */
   wrap.innerHTML = "";
   overlay.className = "overlay";
 
-  logo.className = "logo"; // kun ét state
+  /* 🔥 RESET LOGO (vigtigt) */
+  logo.className = "logo";
 
-  /* LOGO animation */
+  /* FORCE REPAINT (fjerner dobbelt logo bug) */
+  void logo.offsetWidth;
+
+  /* START LOGO */
   setTimeout(() => {
     logo.classList.add("logoSmall");
-  }, 100);
+  }, 50);
 
   let startDelay = 4200;
   let delay = 2000;
 
-  /* tekst */
+  /* TEKSTER */
   texts.forEach((t, i) => {
     setTimeout(() => showText(t), startDelay + i * delay);
   });
 
-  /* overlay først */
+  /* OVERLAY */
   setTimeout(() => {
     overlay.classList.add("overlayShow");
   }, startDelay + texts.length * delay);
@@ -172,19 +181,12 @@ function start() {
     showBig("Vi producerer over 50 millioner skruer dagligt.");
   }, startDelay + texts.length * delay + 1200);
 
-  /* CTA */
+  /* CTA (nu med fade!) */
   setTimeout(() => {
-    const el = create("Vil du forhandle SPAX - Kontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
-    el.classList.add("cta");
-    el.style.whiteSpace = "pre-line";
-    el.style.opacity = "1";
-
-    wrap.innerHTML = "";
-    wrap.appendChild(el);
-
+    showCTA("Vil du forhandle SPAX kontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay + texts.length * delay + 5000);
 
-  /* LOOP */
+  /* LOOP – helt ren reset */
   setTimeout(start, startDelay + texts.length * delay + 11000);
 }
 
@@ -199,6 +201,16 @@ function showText(txt) {
 function showBig(txt) {
   const el = create(txt);
   el.classList.add("fadeZoom");
+  wrap.innerHTML = "";
+  wrap.appendChild(el);
+}
+
+function showCTA(txt) {
+  const el = create(txt);
+  el.classList.add("fade");
+  el.classList.add("cta");
+  el.style.whiteSpace = "pre-line";
+
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
