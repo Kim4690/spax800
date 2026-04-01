@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=800, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-}
+body { margin: 0; }
 
 .banner {
   width: 800px;
@@ -24,26 +22,31 @@ body {
   position: absolute;
   right: 20px;
   bottom: 20px;
-  transform: scale(3);
+  width: 760px; /* næsten hele banner */
   opacity: 0;
-  animation: logoMove 3s ease forwards;
+  transform: scale(1);
+  animation: logoAnim 4s ease forwards;
 }
 
-@keyframes logoMove {
+@keyframes logoAnim {
   0% {
-    transform: scale(3) translate(0, 0);
+    width: 800px;
+    right: 0;
+    bottom: 0;
     opacity: 0;
   }
-  50% {
+  20% {
     opacity: 1;
   }
   100% {
-    transform: scale(1) translate(0, 0);
+    width: 180px;
+    right: 20px;
+    bottom: 20px;
     opacity: 1;
   }
 }
 
-/* TEKST CENTER */
+/* TEKST */
 .textContainer {
   position: absolute;
   width: 100%;
@@ -52,25 +55,25 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #fff;
-  font-weight: bold;
   pointer-events: none;
 }
 
 .text {
   position: absolute;
+  color: #fff;
+  font-size: 38px;
+  font-weight: bold;
   opacity: 0;
-  max-width: 700px;
 }
 
-/* tekst animation */
-.showText {
+/* animation */
+.animateText {
   animation: textAnim 2.5s ease forwards;
 }
 
 @keyframes textAnim {
   0% {
-    transform: scale(1.6);
+    transform: scale(1.8);
     opacity: 0;
   }
   20% {
@@ -84,11 +87,6 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
-}
-
-/* stor tekst */
-.bigText {
-  font-size: 34px;
 }
 
 /* CTA */
@@ -110,7 +108,7 @@ body {
 <div class="banner" onclick="clickBanner()">
 
   <!-- LOGO -->
-  <img src="SPAX-logo-NY.jpg" class="logo" width="220">
+  <img src="SPAX-logo-NY.jpg" class="logo">
 
   <!-- TEKST -->
   <div class="textContainer" id="textContainer"></div>
@@ -133,36 +131,36 @@ const texts = [
 
 const container = document.getElementById("textContainer");
 
-let delay = 2000;
+let delay = 2200;
 
+/* LOOP TEKSTER */
 texts.forEach((txt, i) => {
   setTimeout(() => {
     const el = document.createElement("div");
-    el.className = "text bigText showText";
+    el.className = "text animateText";
     el.innerText = txt;
     container.innerHTML = "";
     container.appendChild(el);
-  }, i * delay);
+  }, i * delay + 1000);
 });
 
-/* stor tekst */
+/* STOR TEKST */
 setTimeout(() => {
   const el = document.createElement("div");
-  el.className = "text bigText showText";
+  el.className = "text animateText";
   el.innerText = "Vi producerer over 50 millioner skruer dagligt.";
   container.innerHTML = "";
   container.appendChild(el);
-}, texts.length * delay);
+}, texts.length * delay + 1000);
 
 /* CTA */
 setTimeout(() => {
   const el = document.createElement("div");
   el.className = "cta";
-  el.innerText = "Kontakt Søren Dagø på 51 23 31 50
-denmark.info@spax.com - www.spax.com";
+  el.innerText = "Kontakt Søren Dagø ved at klikke på banneret";
   container.innerHTML = "";
   container.appendChild(el);
-}, texts.length * delay + 3000);
+}, texts.length * delay + 3500);
 
 </script>
 
