@@ -21,7 +21,7 @@ body { margin:0; }
 .logo {
   position:absolute;
   z-index:5;
-  transition: all 1.2s ease;
+  transition: all 1s ease;
 }
 
 .logoStart {
@@ -33,10 +33,10 @@ body { margin:0; }
 
 .logoEnd {
   width:170px;
-  top:auto;
-  left:auto;
   right:20px;
   bottom:20px;
+  top:auto;
+  left:auto;
   transform:none;
 }
 
@@ -49,7 +49,7 @@ body { margin:0; }
   height:100%;
   background:rgba(0,80,40,0.75);
   z-index:2;
-  transition:right 1s ease;
+  transition:right 0.8s ease;
 }
 
 .overlayShow { right:0; }
@@ -77,57 +77,64 @@ body { margin:0; }
   opacity:0;
 }
 
+/* standard tekst */
 .fade {
-  animation:fadeScale 2.5s ease forwards;
+  animation:fadeScale 2.2s ease forwards;
 }
 
 @keyframes fadeScale {
-  0% { transform:scale(1.4); opacity:0; }
+  0% { transform:scale(1.3); opacity:0; }
   20% { opacity:1; }
-  80% { opacity:1; transform:scale(1); }
-  100% { opacity:0; transform:scale(0.9); }
+  80% { opacity:1; }
+  100% { opacity:0; }
 }
 
+/* 50 mio */
 .fadeZoom {
-  animation:fadeZoom 4.5s ease forwards;
+  animation:fadeZoom 4s ease forwards;
 }
 
 @keyframes fadeZoom {
   0% { transform:scale(1.2); opacity:0; }
   20% { opacity:1; }
-  75% { opacity:1; transform:scale(1); }
-  100% { opacity:0; transform:scale(2); }
+  75% { opacity:1; }
+  100% { transform:scale(2); opacity:0; }
 }
 
+/* CTA (LANGERE) */
 .cta {
   font-size:22px;
   line-height:1.4;
+  animation:ctaAnim 6s ease forwards;
 }
+
+@keyframes ctaAnim {
+  0% { opacity:0; transform:scale(1.2); }
+  10% { opacity:1; }
+  85% { opacity:1; }
+  100% { opacity:0; }
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="banner" id="banner">
+
   <img src="SPAX-logo-NY.jpg" class="logo logoStart" id="logo">
   <div class="overlay" id="overlay"></div>
   <div class="textWrap" id="wrap"></div>
+
 </div>
 
 <script>
-
-const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
-
-document.getElementById('banner').onclick = function(){
-  try { window.top.location.href = link; }
-  catch(e){ window.open(link); }
-};
 
 const wrap = document.getElementById("wrap");
 const logo = document.getElementById("logo");
 const overlay = document.getElementById("overlay");
 
-let timers = []; // 🔥 vigtig
+let timers = [];
 
 const texts = [
   "Terrasseskruer",
@@ -137,33 +144,29 @@ const texts = [
   "Udendørs skruer"
 ];
 
-/* CLEAR ALL */
-function clearTimers(){
+function clearAll(){
   timers.forEach(t => clearTimeout(t));
   timers = [];
 }
 
-/* RESET */
 function reset(){
   wrap.innerHTML = "";
   overlay.className = "overlay";
   logo.className = "logo logoStart";
 }
 
-/* START */
 function start(){
 
-  clearTimers();
+  clearAll();
   reset();
 
-  /* repaint */
   void logo.offsetWidth;
 
   timers.push(setTimeout(()=>{
     logo.classList.replace("logoStart","logoEnd");
   },100));
 
-  let startDelay = 3200;
+  let startDelay = 2200; // 🔥 hurtigere start
   let delay = 2000;
 
   texts.forEach((t,i)=>{
@@ -178,17 +181,17 @@ function start(){
   /* 50 mio */
   timers.push(setTimeout(()=>{
     showBig("Vi producerer over 50 millioner skruer dagligt.");
-  }, startDelay + texts.length*delay + 1000));
+  }, startDelay + texts.length*delay + 800));
 
-  /* CTA – MEGET længere */
+  /* CTA */
   timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX, kontakt Søren Dagø på 51 23 31 50 - soren.dago@spax.com - www.spax.com");
-  }, startDelay + texts.length*delay + 6500));
+  }, startDelay + texts.length*delay + 5000));
 
-  /* LOOP – efter CTA er HELT færdig */
+  /* RESTART (ingen pause!) */
   timers.push(setTimeout(()=>{
-    start(); // 🔥 ren restart
-  }, startDelay + texts.length*delay + 18000));
+    start();
+  }, startDelay + texts.length*delay + 11000));
 }
 
 /* helpers */
@@ -208,7 +211,7 @@ function showBig(txt){
 
 function showCTA(txt){
   const el = create(txt);
-  el.classList.add("fade","cta");
+  el.classList.add("cta","text");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
@@ -220,7 +223,6 @@ function create(txt){
   return el;
 }
 
-/* START */
 start();
 
 </script>
