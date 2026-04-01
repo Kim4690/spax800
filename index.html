@@ -24,9 +24,9 @@ body { margin:0; }
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
+  z-index:5;
 }
 
-/* LOGO ANIMATION */
 .logoStart {
   animation:logoMove 4s ease forwards;
 }
@@ -48,6 +48,25 @@ body { margin:0; }
   }
 }
 
+/* OVERLAY */
+.overlay {
+  position:absolute;
+  top:0;
+  right:-100%;
+  width:100%;
+  height:100%;
+  background:rgba(0, 80, 40, 0.75);
+  z-index:2;
+}
+
+.overlayIn {
+  animation:overlayMove 1s ease forwards;
+}
+
+@keyframes overlayMove {
+  to { right:0; }
+}
+
 /* TEKST */
 .textWrap {
   position:absolute;
@@ -58,6 +77,7 @@ body { margin:0; }
   justify-content:center;
   text-align:center;
   pointer-events:none;
+  z-index:3;
 }
 
 .text {
@@ -69,52 +89,44 @@ body { margin:0; }
   opacity:0;
 }
 
-/* STANDARD ANIMATION */
+.cta {
+  font-size:26px;
+  line-height:1.4;
+}
+
+/* STANDARD */
 .show {
   animation:fadeScale 2.6s ease forwards;
 }
 
 @keyframes fadeScale {
-  0% {
-    transform:scale(1.6);
-    opacity:0;
-  }
+  0% { transform:scale(1.6); opacity:0; }
   20% { opacity:1; }
-  80% {
-    opacity:1;
-    transform:scale(1);
-  }
-  100% {
-    opacity:0;
-    transform:scale(0.9);
-  }
+  80% { transform:scale(1); opacity:1; }
+  100% { transform:scale(0.9); opacity:0; }
 }
 
-/* ZOOM OUT (til 50 mio) */
+/* 50 mio */
 .zoomOut {
   animation:zoomOut 2s ease forwards;
 }
 
 @keyframes zoomOut {
-  0% {
-    transform:scale(1);
-    opacity:1;
-  }
-  100% {
+  to {
     transform:scale(2);
     opacity:0;
   }
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="banner" id="banner"
-data-link="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen">
+<div class="banner" id="banner">
 
   <img src="SPAX-logo-NY.jpg" class="logo" id="logo">
+
+  <div class="overlay" id="overlay"></div>
 
   <div class="textWrap" id="wrap"></div>
 
@@ -122,13 +134,15 @@ data-link="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJe
 
 <script>
 
-/* CLICK */
+/* 🔥 FIXET CLICK (virker i iframe + mobil) */
 document.getElementById('banner').addEventListener('click', function(){
-  window.top.location.href = this.getAttribute('data-link');
+  const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
+  window.top.location.href = link;
 });
 
 const wrap = document.getElementById("wrap");
 const logo = document.getElementById("logo");
+const overlay = document.getElementById("overlay");
 
 const texts = [
   "Terrasseskruer",
@@ -141,17 +155,20 @@ const texts = [
 function startBanner() {
 
   wrap.innerHTML = "";
+  overlay.style.right = "-100%";
+  overlay.className = "overlay";
+
   logo.className = "logo logoStart";
 
   let startDelay = 4500;
   let delay = 2200;
 
-  /* STEP 1: små tekster */
+  /* TEKSTER */
   texts.forEach((t, i) => {
     setTimeout(() => showText(t), startDelay + i * delay);
   });
 
-  /* STEP 2: 50 mio */
+  /* 50 mio */
   setTimeout(() => {
     const el = createText("Vi producerer over 50 millioner skruer dagligt.");
     wrap.innerHTML = "";
@@ -160,27 +177,33 @@ function startBanner() {
 
     setTimeout(() => {
       el.classList.add("zoomOut");
-    }, 3000);
+    }, 3500);
 
   }, startDelay + texts.length * delay);
 
-  /* STEP 3: CTA */
+  /* OVERLAY IND */
+  setTimeout(() => {
+    overlay.classList.add("overlayIn");
+  }, startDelay + texts.length * delay + 4000);
+
+  /* CTA */
   setTimeout(() => {
     const el = createText(
       "Kontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com"
     );
+    el.classList.add("cta");
     el.style.whiteSpace = "pre-line";
     el.style.opacity = "1";
 
     wrap.innerHTML = "";
     wrap.appendChild(el);
 
-  }, startDelay + texts.length * delay + 5000);
+  }, startDelay + texts.length * delay + 5200);
 
   /* LOOP */
   setTimeout(() => {
     startBanner();
-  }, startDelay + texts.length * delay + 10000);
+  }, startDelay + texts.length * delay + 12000);
 }
 
 /* helpers */
