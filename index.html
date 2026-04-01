@@ -24,10 +24,14 @@ body { margin:0; }
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  animation:logoAnim 4s ease forwards;
 }
 
-@keyframes logoAnim {
+/* LOGO ANIMATION */
+.logoStart {
+  animation:logoMove 4s ease forwards;
+}
+
+@keyframes logoMove {
   0% {
     width:800px;
     top:50%;
@@ -65,6 +69,7 @@ body { margin:0; }
   opacity:0;
 }
 
+/* STANDARD ANIMATION */
 .show {
   animation:fadeScale 2.6s ease forwards;
 }
@@ -84,28 +89,46 @@ body { margin:0; }
     transform:scale(0.9);
   }
 }
+
+/* ZOOM OUT (til 50 mio) */
+.zoomOut {
+  animation:zoomOut 2s ease forwards;
+}
+
+@keyframes zoomOut {
+  0% {
+    transform:scale(1);
+    opacity:1;
+  }
+  100% {
+    transform:scale(2);
+    opacity:0;
+  }
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="banner" data-link="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen">
+<div class="banner" id="banner"
+data-link="mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen">
 
-  <img src="SPAX-logo-NY.jpg" class="logo">
+  <img src="SPAX-logo-NY.jpg" class="logo" id="logo">
 
-  <div class="textWrap" id="textWrap"></div>
+  <div class="textWrap" id="wrap"></div>
 
 </div>
 
 <script>
 
-/* KLIK – virker i alle systemer */
-document.querySelector('.banner').addEventListener('click', function() {
+/* CLICK */
+document.getElementById('banner').addEventListener('click', function(){
   window.top.location.href = this.getAttribute('data-link');
 });
 
-
-const wrap = document.getElementById('textWrap');
+const wrap = document.getElementById("wrap");
+const logo = document.getElementById("logo");
 
 const texts = [
   "Terrasseskruer",
@@ -115,51 +138,68 @@ const texts = [
   "Udendørs skruer"
 ];
 
-let start = 4500; // starter efter logo
-let delay = 2300;
+function startBanner() {
 
-/* LILLE TEKSTER */
-texts.forEach((t, i) => {
+  wrap.innerHTML = "";
+  logo.className = "logo logoStart";
+
+  let startDelay = 4500;
+  let delay = 2200;
+
+  /* STEP 1: små tekster */
+  texts.forEach((t, i) => {
+    setTimeout(() => showText(t), startDelay + i * delay);
+  });
+
+  /* STEP 2: 50 mio */
   setTimeout(() => {
-    showText(t);
-  }, start + (i * delay));
-});
+    const el = createText("Vi producerer over 50 millioner skruer dagligt.");
+    wrap.innerHTML = "";
+    wrap.appendChild(el);
+    el.style.opacity = "1";
 
-/* 50 mio (længere) */
-setTimeout(() => {
-  showStatic("Vi producerer over 50 millioner skruer dagligt.", 3500);
-}, start + texts.length * delay);
+    setTimeout(() => {
+      el.classList.add("zoomOut");
+    }, 3000);
 
-/* CTA (længere + samme stil) */
-setTimeout(() => {
-  showStatic("Kontakt Søren Dagø ved at klikke på banneret", 4000);
-}, start + texts.length * delay + 3500);
+  }, startDelay + texts.length * delay);
 
+  /* STEP 3: CTA */
+  setTimeout(() => {
+    const el = createText(
+      "Kontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com"
+    );
+    el.style.whiteSpace = "pre-line";
+    el.style.opacity = "1";
 
-/* FUNCTIONS */
+    wrap.innerHTML = "";
+    wrap.appendChild(el);
 
+  }, startDelay + texts.length * delay + 5000);
+
+  /* LOOP */
+  setTimeout(() => {
+    startBanner();
+  }, startDelay + texts.length * delay + 10000);
+}
+
+/* helpers */
 function showText(txt) {
-  const el = document.createElement("div");
-  el.className = "text show";
-  el.innerText = txt;
-
+  const el = createText(txt);
+  el.classList.add("show");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
-function showStatic(txt, duration) {
+function createText(txt) {
   const el = document.createElement("div");
   el.className = "text";
-  el.style.opacity = "1";
   el.innerText = txt;
-
-  wrap.innerHTML = "";
-  wrap.appendChild(el);
-
-  setTimeout(() => {
-    el.style.opacity = "0";
-  }, duration);
+  return el;
 }
+
+/* START */
+startBanner();
 
 </script>
 
