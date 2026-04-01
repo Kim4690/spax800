@@ -17,40 +17,25 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* LOGO */
+/* LOGO (ingen CSS animation!) */
 .logo {
   position:absolute;
-  z-index:5;
-}
-
-/* RESET (vigtigt for loop) */
-.logoReset {
   width:800px;
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
+  z-index:5;
+  transition: all 1.2s ease;
 }
 
-/* ANIMATION */
-.logoAnim {
-  animation:logoMove 4s ease forwards;
-}
-
-@keyframes logoMove {
-  0% {
-    width:800px;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-  }
-  100% {
-    width:170px;
-    right:20px;
-    bottom:20px;
-    top:auto;
-    left:auto;
-    transform:none;
-  }
+/* slut position */
+.logoSmall {
+  width:170px;
+  top:auto;
+  left:auto;
+  right:20px;
+  bottom:20px;
+  transform:none;
 }
 
 /* OVERLAY */
@@ -62,14 +47,11 @@ body { margin:0; }
   height:100%;
   background:rgba(0, 80, 40, 0.75);
   z-index:2;
+  transition: right 1s ease;
 }
 
-.overlayIn {
-  animation:overlayMove 1s ease forwards;
-}
-
-@keyframes overlayMove {
-  to { right:0; }
+.overlayShow {
+  right:0;
 }
 
 /* TEKST */
@@ -95,33 +77,34 @@ body { margin:0; }
   opacity:0;
 }
 
-.cta {
-  font-size:22px;
-  line-height:1.4;
-}
-
-/* STANDARD */
-.show {
-  animation:fadeScale 2.6s ease forwards;
+/* standard tekst */
+.fade {
+  animation:fadeScale 2.5s ease forwards;
 }
 
 @keyframes fadeScale {
-  0% { transform:scale(1.6); opacity:0; }
+  0% { transform:scale(1.5); opacity:0; }
   20% { opacity:1; }
-  80% { transform:scale(1); opacity:1; }
-  100% { transform:scale(0.9); opacity:0; }
+  80% { opacity:1; transform:scale(1); }
+  100% { opacity:0; transform:scale(0.9); }
 }
 
 /* 50 mio */
-.zoomOut {
-  animation:zoomOut 2s ease forwards;
+.fadeZoom {
+  animation:fadeZoom 3.5s ease forwards;
 }
 
-@keyframes zoomOut {
-  to {
-    transform:scale(2);
-    opacity:0;
-  }
+@keyframes fadeZoom {
+  0% { transform:scale(1.3); opacity:0; }
+  20% { opacity:1; }
+  70% { opacity:1; transform:scale(1); }
+  100% { opacity:0; transform:scale(2); }
+}
+
+/* CTA */
+.cta {
+  font-size:22px;
+  line-height:1.4;
 }
 </style>
 </head>
@@ -140,10 +123,11 @@ body { margin:0; }
 
 <script>
 
-/* CLICK FIX */
-document.getElementById('banner').addEventListener('click', function(){
-  window.top.location.href = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
-});
+/* ✅ CLICK (fixet korrekt) */
+document.getElementById('banner').onclick = function() {
+  const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
+  window.open(link, "_top");
+};
 
 const wrap = document.getElementById("wrap");
 const logo = document.getElementById("logo");
@@ -157,48 +141,40 @@ const texts = [
   "Udendørs skruer"
 ];
 
-function startBanner() {
+function start() {
 
-  /* RESET ALT */
+  /* RESET */
   wrap.innerHTML = "";
   overlay.className = "overlay";
-  overlay.style.right = "-100%";
 
-  /* 🔥 vigtigt: reset logo korrekt */
-  logo.className = "logo logoReset";
+  logo.className = "logo"; // kun ét state
 
+  /* LOGO animation */
   setTimeout(() => {
-    logo.className = "logo logoAnim";
-  }, 50);
+    logo.classList.add("logoSmall");
+  }, 100);
 
-  let startDelay = 4500;
-  let delay = 2200;
+  let startDelay = 4200;
+  let delay = 2000;
 
-  /* TEKSTER */
+  /* tekst */
   texts.forEach((t, i) => {
     setTimeout(() => showText(t), startDelay + i * delay);
   });
 
-  /* 50 mio + overlay */
+  /* overlay først */
   setTimeout(() => {
-    overlay.classList.add("overlayIn");
-
-    const el = createText("Vi producerer over 50 millioner skruer dagligt.");
-    wrap.innerHTML = "";
-    wrap.appendChild(el);
-    el.style.opacity = "1";
-
-    setTimeout(() => {
-      el.classList.add("zoomOut");
-    }, 3500);
-
+    overlay.classList.add("overlayShow");
   }, startDelay + texts.length * delay);
+
+  /* 50 mio */
+  setTimeout(() => {
+    showBig("Vi producerer over 50 millioner skruer dagligt.");
+  }, startDelay + texts.length * delay + 1200);
 
   /* CTA */
   setTimeout(() => {
-    const el = createText(
-      "Kontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com"
-    );
+    const el = create("Vil du forhandle SPAX - Kontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
     el.classList.add("cta");
     el.style.whiteSpace = "pre-line";
     el.style.opacity = "1";
@@ -209,20 +185,25 @@ function startBanner() {
   }, startDelay + texts.length * delay + 5000);
 
   /* LOOP */
-  setTimeout(() => {
-    startBanner();
-  }, startDelay + texts.length * delay + 12000);
+  setTimeout(start, startDelay + texts.length * delay + 11000);
 }
 
 /* helpers */
 function showText(txt) {
-  const el = createText(txt);
-  el.classList.add("show");
+  const el = create(txt);
+  el.classList.add("fade");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
-function createText(txt) {
+function showBig(txt) {
+  const el = create(txt);
+  el.classList.add("fadeZoom");
+  wrap.innerHTML = "";
+  wrap.appendChild(el);
+}
+
+function create(txt) {
   const el = document.createElement("div");
   el.className = "text";
   el.innerText = txt;
@@ -230,7 +211,7 @@ function createText(txt) {
 }
 
 /* START */
-startBanner();
+start();
 
 </script>
 
