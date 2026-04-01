@@ -152,7 +152,7 @@ function reset(){
   wrap.innerHTML = "";
   overlay.className = "overlay";
 
-  /* 🔥 fjern ALLE logoer */
+  /* fjern ALT med id logo */
   document.querySelectorAll("#logo").forEach(el => el.remove());
 
   /* opret nyt logo */
@@ -161,15 +161,17 @@ function reset(){
   newLogo.id = "logo";
   newLogo.className = "logo logoStart";
 
-  document.querySelector(".banner").appendChild(newLogo);
+  /* 🔥 indsæt som FØRSTE element */
+  const banner = document.querySelector(".banner");
+  banner.insertBefore(newLogo, banner.firstChild);
 }
 
-  function start(){
+ function start(){
 
   clearAll();
   reset();
 
-  const logo = document.getElementById("logo");
+  const logo = document.getElementById("logo"); // ✔ kun her
 
   setTimeout(()=>{
     logo.classList.replace("logoStart","logoEnd");
