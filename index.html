@@ -1,16 +1,6 @@
 <script>
-  
-document.getElementById("banner").onclick = function(){
-  window.open("https://www.spax.com/sv-sv.html", "_blank");
-};
-  
+
 let timers = [];
-
-const link = "https://www.spax.com/sv-sv.html";
-
-document.querySelector(".banner").onclick = function(){
-  window.open(link, "_blank");
-};
 
 const texts = [
   "Terrasseskruer",
@@ -26,13 +16,17 @@ function clearAll(){
 }
 
 function reset(){
-  document.getElementById("wrap").innerHTML = "";
-  document.getElementById("overlay").className = "overlay";
-
+  const wrap = document.getElementById("wrap");
+  const overlay = document.getElementById("overlay");
   const logo = document.getElementById("logo");
+
+  if(!wrap || !overlay || !logo) return;
+
+  wrap.innerHTML = "";
+  overlay.className = "overlay";
   logo.className = "logo logoStart";
 
-  logo.offsetHeight;
+  logo.offsetHeight; // force repaint
 }
 
 function start(){
@@ -42,6 +36,8 @@ function start(){
 
   const logo = document.getElementById("logo");
   const overlay = document.getElementById("overlay");
+
+  if(!logo || !overlay) return;
 
   /* logo animation */
   timers.push(setTimeout(()=>{
@@ -75,39 +71,51 @@ function start(){
 /* helpers */
 function showText(txt){
   const wrap = document.getElementById("wrap");
+  if(!wrap) return;
+
   const el = document.createElement("div");
   el.className = "text fade";
   el.innerText = txt;
+
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
 function showBig(txt){
   const wrap = document.getElementById("wrap");
+  if(!wrap) return;
+
   const el = document.createElement("div");
   el.className = "text bigText";
   el.innerText = txt;
+
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
 function showCTA(txt){
   const wrap = document.getElementById("wrap");
+  if(!wrap) return;
+
   const el = document.createElement("div");
   el.className = "text cta";
   el.innerText = txt;
+
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
-start();
-  
-window.onload = function(){
+/* 🔥 klik (én gang – korrekt) */
+window.addEventListener("load", function(){
   const banner = document.getElementById("banner");
+
   if(banner){
     banner.onclick = function(){
       window.open("https://www.spax.com/sv-sv.html", "_blank");
     };
   }
-};
+
+  start(); // start først når alt er loaded
+});
+
 </script>
