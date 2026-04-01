@@ -20,14 +20,19 @@ body { margin:0; }
 /* LOGO */
 .logo {
   position:absolute;
+  z-index:5;
+}
+
+/* RESET (vigtigt for loop) */
+.logoReset {
   width:800px;
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  z-index:5;
 }
 
-.logoStart {
+/* ANIMATION */
+.logoAnim {
   animation:logoMove 4s ease forwards;
 }
 
@@ -40,10 +45,10 @@ body { margin:0; }
   }
   100% {
     width:170px;
-    top:auto;
-    left:auto;
     right:20px;
     bottom:20px;
+    top:auto;
+    left:auto;
     transform:none;
   }
 }
@@ -85,12 +90,13 @@ body { margin:0; }
   color:#fff;
   font-size:36px;
   font-weight:bold;
-  max-width:700px;
+  max-width:650px;
+  padding:0 40px;
   opacity:0;
 }
 
 .cta {
-  font-size:26px;
+  font-size:22px;
   line-height:1.4;
 }
 
@@ -134,10 +140,9 @@ body { margin:0; }
 
 <script>
 
-/* 🔥 FIXET CLICK (virker i iframe + mobil) */
+/* CLICK FIX */
 document.getElementById('banner').addEventListener('click', function(){
-  const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
-  window.top.location.href = link;
+  window.top.location.href = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
 });
 
 const wrap = document.getElementById("wrap");
@@ -154,11 +159,17 @@ const texts = [
 
 function startBanner() {
 
+  /* RESET ALT */
   wrap.innerHTML = "";
-  overlay.style.right = "-100%";
   overlay.className = "overlay";
+  overlay.style.right = "-100%";
 
-  logo.className = "logo logoStart";
+  /* 🔥 vigtigt: reset logo korrekt */
+  logo.className = "logo logoReset";
+
+  setTimeout(() => {
+    logo.className = "logo logoAnim";
+  }, 50);
 
   let startDelay = 4500;
   let delay = 2200;
@@ -168,8 +179,10 @@ function startBanner() {
     setTimeout(() => showText(t), startDelay + i * delay);
   });
 
-  /* 50 mio */
+  /* 50 mio + overlay */
   setTimeout(() => {
+    overlay.classList.add("overlayIn");
+
     const el = createText("Vi producerer over 50 millioner skruer dagligt.");
     wrap.innerHTML = "";
     wrap.appendChild(el);
@@ -180,11 +193,6 @@ function startBanner() {
     }, 3500);
 
   }, startDelay + texts.length * delay);
-
-  /* OVERLAY IND */
-  setTimeout(() => {
-    overlay.classList.add("overlayIn");
-  }, startDelay + texts.length * delay + 4000);
 
   /* CTA */
   setTimeout(() => {
@@ -198,7 +206,7 @@ function startBanner() {
     wrap.innerHTML = "";
     wrap.appendChild(el);
 
-  }, startDelay + texts.length * delay + 5200);
+  }, startDelay + texts.length * delay + 5000);
 
   /* LOOP */
   setTimeout(() => {
