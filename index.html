@@ -17,14 +17,13 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* LOGO STATES */
+/* LOGO */
 .logo {
   position:absolute;
   z-index:5;
   transition: all 1.2s ease;
 }
 
-/* START */
 .logoStart {
   width:800px;
   top:50%;
@@ -32,7 +31,6 @@ body { margin:0; }
   transform:translate(-50%, -50%);
 }
 
-/* SLUT */
 .logoEnd {
   width:170px;
   top:auto;
@@ -54,9 +52,7 @@ body { margin:0; }
   transition:right 1s ease;
 }
 
-.overlayShow {
-  right:0;
-}
+.overlayShow { right:0; }
 
 /* TEXT */
 .textWrap {
@@ -113,31 +109,25 @@ body { margin:0; }
 <body>
 
 <div class="banner" id="banner">
-
   <img src="SPAX-logo-NY.jpg" class="logo logoStart" id="logo">
-
   <div class="overlay" id="overlay"></div>
-
   <div class="textWrap" id="wrap"></div>
-
 </div>
 
 <script>
 
 const link = "mailto:kim@odsgard.dk?subject=SPAX%20produkter&body=Hej%0D%0A%0D%0AJeg%20er%20forhandler%20og%20vil%20gerne%20kontaktes%20om%20SPAX%20produkter.%0D%0A%0D%0AMed%20venlig%20hilsen";
 
-/* CLICK */
 document.getElementById('banner').onclick = function(){
-  try {
-    window.top.location.href = link;
-  } catch(e) {
-    window.open(link);
-  }
+  try { window.top.location.href = link; }
+  catch(e){ window.open(link); }
 };
 
 const wrap = document.getElementById("wrap");
 const logo = document.getElementById("logo");
 const overlay = document.getElementById("overlay");
+
+let timers = []; // 🔥 vigtig
 
 const texts = [
   "Terrasseskruer",
@@ -147,71 +137,83 @@ const texts = [
   "Udendørs skruer"
 ];
 
-function start() {
+/* CLEAR ALL */
+function clearTimers(){
+  timers.forEach(t => clearTimeout(t));
+  timers = [];
+}
 
-  /* RESET */
+/* RESET */
+function reset(){
   wrap.innerHTML = "";
   overlay.className = "overlay";
-
   logo.className = "logo logoStart";
+}
 
-  /* FORCE repaint (vigtigt) */
+/* START */
+function start(){
+
+  clearTimers();
+  reset();
+
+  /* repaint */
   void logo.offsetWidth;
 
-  /* START logo animation */
-  setTimeout(() => {
-    logo.classList.replace("logoStart", "logoEnd");
-  }, 100);
+  timers.push(setTimeout(()=>{
+    logo.classList.replace("logoStart","logoEnd");
+  },100));
 
   let startDelay = 3200;
   let delay = 2000;
 
-  texts.forEach((t, i) => {
-    setTimeout(() => showText(t), startDelay + i * delay);
+  texts.forEach((t,i)=>{
+    timers.push(setTimeout(()=>showText(t), startDelay + i*delay));
   });
 
   /* overlay */
-  setTimeout(() => {
+  timers.push(setTimeout(()=>{
     overlay.classList.add("overlayShow");
-  }, startDelay + texts.length * delay);
+  }, startDelay + texts.length*delay));
 
   /* 50 mio */
-  setTimeout(() => {
+  timers.push(setTimeout(()=>{
     showBig("Vi producerer over 50 millioner skruer dagligt.");
-  }, startDelay + texts.length * delay + 1000);
+  }, startDelay + texts.length*delay + 1000));
 
-  /* CTA */
-  setTimeout(() => {
+  /* CTA – MEGET længere */
+  timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX, kontakt Søren Dagø på 51 23 31 50 - soren.dago@spax.com - www.spax.com");
-  }, startDelay + texts.length * delay + 6500);
+  }, startDelay + texts.length*delay + 6500));
 
-  /* LOOP */
-  setTimeout(start, startDelay + texts.length * delay + 15000);
+  /* LOOP – efter CTA er HELT færdig */
+  timers.push(setTimeout(()=>{
+    start(); // 🔥 ren restart
+  }, startDelay + texts.length*delay + 18000));
 }
 
 /* helpers */
-function showText(txt) {
+function showText(txt){
   const el = create(txt);
   el.classList.add("fade");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
-function showBig(txt) {
+function showBig(txt){
   const el = create(txt);
   el.classList.add("fadeZoom");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
-function showCTA(txt) {
+function showCTA(txt){
   const el = create(txt);
-  el.classList.add("fade", "cta");
+  el.classList.add("fade","cta");
   wrap.innerHTML = "";
   wrap.appendChild(el);
 }
 
-function create(txt) {
+function create(txt){
   const el = document.createElement("div");
   el.className = "text";
   el.innerText = txt;
