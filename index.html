@@ -160,9 +160,12 @@ function start(){
 
   void logo.offsetWidth;
 
-  timers.push(setTimeout(()=>{
-    logo.classList.replace("logoStart","logoEnd");
-  },100));
+  requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      logo.classList.replace("logoStart","logoEnd");
+    }, 300); // lidt længere delay
+  });
 
   let startDelay = 2200;
   let delay = 2000;
