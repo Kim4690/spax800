@@ -36,7 +36,10 @@ body { margin:0; }
 /* 🔥 LILLE (flyttes via transform – IKKE right/bottom) */
 .logoSmall{
   transform:
-    translate(calc(-50% + 260px), calc(-50% + 80px))
+    translate(
+      calc(-50% + clamp(140px, 40vw, 270px)),
+      calc(-50% + clamp(50px, 15vw, 95px))
+    )
     scale(0.14);
 }
 
