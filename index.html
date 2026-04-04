@@ -22,34 +22,29 @@ body { margin:0; }
 .logo {
   position:absolute;
   z-index:5;
-  transition: all 1s ease;
+  transition: all 1s ease, opacity 0.6s ease;
 }
 
 .logoStart {
   width:100%;
-  max-width:620px;
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  opacity:0;
-  animation:logoFade 0.5s ease forwards;
-}
-
-@keyframes logoFade {
-  to { opacity:1; }
+  opacity:1;
 }
 
 .logoEnd {
-  width:14%;       /* 👈 responsiv størrelse */
-  max-width:130px; /* 👈 stopper på desktop */
-  min-width:80px;  /* 👈 bliver ikke for lille */
+  width:22%;
+  max-width:130px;
+  min-width:80px;
 
   right:4%;
-  bottom:4%;
-
+  bottom:8%;
   top:auto;
   left:auto;
+
   transform:none;
+  opacity:1; /* 👈 vigtig */
 }
 
 /* OVERLAY */
@@ -178,11 +173,21 @@ function start(){
   const logo = document.getElementById("logo");
   const overlay = document.getElementById("overlay");
 
-  timers.push(setTimeout(()=>{
-    logo.classList.replace("logoStart","logoEnd");
-  }, 600));
+  /* logo intro */
+logo.style.opacity = "1";
 
-  let startDelay = 2000;
+timers.push(setTimeout(()=>{
+
+  logo.style.opacity = "0";
+
+  setTimeout(()=>{
+    logo.style.opacity = "1";
+    logo.classList.replace("logoStart","logoEnd");
+  }, 300);
+
+}, 2000));
+
+  let startDelay = 3500;
   let delay = 1600;
 
   texts.forEach((t,i)=>{
