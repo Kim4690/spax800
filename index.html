@@ -18,7 +18,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* 🔥 LOGO (KORRIGERET) */
+/* 🔥 LOGO – KUN SMOOTH */
 .logo{
   position:absolute;
   top:50%;
@@ -31,19 +31,14 @@ body { margin:0; }
   opacity:1;
 
   transition:
-    transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 1.6s ease;
+    transform 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1.8s ease;
 }
 
-/* lille logo */
+/* lille */
 .logoSmall{
   transform:translate(135%, 75%) scale(0.14);
-  opacity:1; /* 🔥 vigtigt – forsvinder ikke */
-}
-
-/* KUN let fade (ikke usynlig) */
-.logoSoft{
-  opacity:0.85;
+  opacity:0.9; /* 🔥 aldrig 0 */
 }
 
 /* OVERLAY */
@@ -59,7 +54,7 @@ body { margin:0; }
 }
 .overlayShow{ right:0; }
 
-/* TEXT – UÆNDRET */
+/* TEXT (UÆNDRET) */
 .textWrap{
   position:absolute;
   width:100%;
@@ -129,9 +124,9 @@ body { margin:0; }
 
 <script>
 
-let timers = [];
+let timers=[];
 
-const texts = [
+const texts=[
   "Terrasseskruer",
   "Konstruktionsskruer",
   "Facadeskruer",
@@ -139,97 +134,96 @@ const texts = [
   "Udendørs skruer"
 ];
 
+const wrap=document.getElementById("wrap");
+const overlay=document.getElementById("overlay");
+const logo=document.getElementById("logo");
+
 function clearAll(){
-  timers.forEach(t => clearTimeout(t));
-  timers = [];
+  timers.forEach(t=>clearTimeout(t));
+  timers=[];
 }
 
 function reset(){
-  wrap.innerHTML = "";
-  overlay.className = "overlay";
-
-  logo.className = "logo";
+  wrap.innerHTML="";
+  overlay.className="overlay";
+  logo.className="logo";
   logo.offsetHeight;
 }
-
-const wrap = document.getElementById("wrap");
-const overlay = document.getElementById("overlay");
-const logo = document.getElementById("logo");
 
 function start(){
 
   clearAll();
   reset();
 
-  /* 🔥 LOGO NED (smooth – ingen forsvinden) */
+  /* 🔥 LOGO NED (REN OG SMOOTH) */
   timers.push(setTimeout(()=>{
-    logo.classList.add("logoSoft");
     logo.classList.add("logoSmall");
   },1500));
 
-  let startDelay = 3200;
-  let delay = 2000;
+  let startDelay=3200;
+  let delay=2000;
 
   texts.forEach((t,i)=>{
-    timers.push(setTimeout(()=>showText(t), startDelay + i*delay));
+    timers.push(setTimeout(()=>showText(t), startDelay+i*delay));
   });
 
   timers.push(setTimeout(()=>{
     overlay.classList.add("overlayShow");
-  }, startDelay + texts.length*delay));
+  }, startDelay+texts.length*delay));
 
   timers.push(setTimeout(()=>{
     showBig("Vi producerer over 50 millioner skruer dagligt.");
-  }, startDelay + texts.length*delay + 800));
+  }, startDelay+texts.length*delay+800));
 
   timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
-  }, startDelay + texts.length*delay + 7000));
+  }, startDelay+texts.length*delay+7000));
 
-  /* 🔥 LOGO OP */
+  /* 🔥 LOGO OP (før overlay fjernes!) */
   timers.push(setTimeout(()=>{
 
     logo.classList.remove("logoSmall");
-    logo.classList.remove("logoSoft");
 
-    /* overlay fjernes mens logo dækker */
-    overlay.classList.remove("overlayShow");
+    /* vent til logo fylder */
+    setTimeout(()=>{
+      overlay.classList.remove("overlayShow");
+    },1000);
 
     /* pause */
     setTimeout(()=>{
       start();
     },1500);
 
-  }, startDelay + texts.length*delay + 15000));
+  }, startDelay+texts.length*delay+15000));
 }
 
 /* helpers */
 function showText(txt){
-  const el = document.createElement("div");
-  el.className = "text fade";
-  el.innerText = txt;
-  wrap.innerHTML = "";
+  const el=document.createElement("div");
+  el.className="text fade";
+  el.innerText=txt;
+  wrap.innerHTML="";
   wrap.appendChild(el);
 }
 
 function showBig(txt){
-  const el = document.createElement("div");
-  el.className = "text bigText";
-  el.innerText = txt;
-  wrap.innerHTML = "";
+  const el=document.createElement("div");
+  el.className="text bigText";
+  el.innerText=txt;
+  wrap.innerHTML="";
   wrap.appendChild(el);
 }
 
 function showCTA(txt){
-  const el = document.createElement("div");
-  el.className = "text cta";
-  el.innerText = txt;
-  wrap.innerHTML = "";
+  const el=document.createElement("div");
+  el.className="text cta";
+  el.innerText=txt;
+  wrap.innerHTML="";
   wrap.appendChild(el);
 }
 
-window.onload = function(){
-  document.getElementById("banner").onclick = function(){
+window.onload=function(){
+  document.getElementById("banner").onclick=function(){
     window.open("https://www.spax.com/sv-sv.html","_blank");
   };
   start();
