@@ -7,6 +7,7 @@
 <style>
 body { margin:0; }
 
+/* 🔥 banner uden baggrunds-logo problem */
 .banner{
   width:100%;
   max-width:620px;
@@ -18,7 +19,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* 🔥 LOGO (FAST & STABIL) */
+/* 🔥 LOGO – ALDRIG opacity 0 */
 .logo{
   position:absolute;
   top:50%;
@@ -28,22 +29,14 @@ body { margin:0; }
   transform-origin:center;
   z-index:5;
 
-  opacity:0;
+  opacity:1; /* 🔥 vigtigt */
 
-  transition:
-    transform 3s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 1.5s ease;
+  transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* lille logo – ALDRIG opacity ændring */
+/* lille */
 .logoSmall{
   transform:translate(135%, 75%) scale(0.14);
-  opacity:1;
-}
-
-/* synlig */
-.logoVisible{
-  opacity:1;
 }
 
 /* OVERLAY */
@@ -59,7 +52,7 @@ body { margin:0; }
 }
 .overlayShow{ right:0; }
 
-/* TEXT */
+/* TEXT (uændret) */
 .textWrap{
   position:absolute;
   width:100%;
@@ -81,7 +74,6 @@ body { margin:0; }
   opacity:0;
 }
 
-/* STANDARD */
 .fade{
   animation:fadeScale 2.2s ease forwards;
 }
@@ -93,7 +85,6 @@ body { margin:0; }
   100% { opacity:0; }
 }
 
-/* 🔥 DIN OPRINDELIGE – IKKE ÆNDRET */
 .bigText{
   animation:bigSequence 6s ease forwards;
 }
@@ -101,13 +92,12 @@ body { margin:0; }
 @keyframes bigSequence{
   0% { opacity:0; transform:scale(1.2); }
   15% { opacity:1; transform:scale(1); }
-  60% { opacity:1; transform:scale(1); }
+  60% { opacity:1; }
   100% { opacity:0; transform:scale(2); }
 }
 
-/* 🔥 CTA – RESPONSIV */
 .cta{
-  font-size:clamp(16px, 3.5vw, 24px);
+  font-size:clamp(16px,3.5vw,24px);
   font-weight:bold;
   line-height:1.4;
   white-space:pre-line;
@@ -149,7 +139,10 @@ function reset(){
   wrap.innerHTML="";
   overlay.className="overlay";
 
+  /* 🔥 behold logo synligt */
   logo.className="logo";
+  logo.style.opacity = "1";
+
   logo.offsetHeight;
 }
 
@@ -158,12 +151,9 @@ function start(){
   clearAll();
   reset();
 
-  /* 🔥 LOGO IND */
-  setTimeout(()=>{
-    logo.classList.add("logoVisible");
-  },100);
+  /* 🔥 START – logo vises med det samme */
 
-  /* 🔥 2,5 sek pause */
+  /* 🔥 stå 2,5 sek */
   timers.push(setTimeout(()=>{
     logo.classList.add("logoSmall");
   },2500));
@@ -192,9 +182,10 @@ function start(){
 
     logo.classList.remove("logoSmall");
 
+    /* overlay fjernes EFTER logo fylder */
     setTimeout(()=>{
       overlay.classList.remove("overlayShow");
-    },2000);
+    },1500);
 
     setTimeout(()=>{
       start();
