@@ -20,8 +20,10 @@ body { margin:0; }
 }
 
 /* 🔥 LOGO – ALTID SAMME ANKER (ingen hop) */
+/* 🔥 LOGO – stabil og responsiv */
 .logo{
   position:absolute;
+
   top:50%;
   left:50%;
 
@@ -32,14 +34,21 @@ body { margin:0; }
 
   z-index:10;
 
-  transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 🔥 LANDING I HØJRE BUND */
+/* 🔥 LILLE LOGO – ALTID korrekt (desktop + mobil) */
 .logoSmall{
-  transform:
-    translate(calc(-50% + 35vw), calc(-50% + 10vw))
-    scale(0.14);
+
+  top:auto;
+  left:auto;
+
+  right:16px;
+  bottom:16px;
+
+  width:14%;
+
+  transform:none;
 }
 
 /* OVERLAY */
