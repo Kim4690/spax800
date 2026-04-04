@@ -8,7 +8,7 @@
 body { margin:0; }
 
 /* BANNER */
-.banner {
+.banner{
   width:100%;
   max-width:620px;
   aspect-ratio:620 / 200;
@@ -19,8 +19,8 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* LOGO (smooth GPU animation) */
-.logo {
+/* LOGO – kun transform (ingen width/opacity) */
+.logo{
   position:absolute;
   top:50%;
   left:50%;
@@ -29,16 +29,16 @@ body { margin:0; }
   z-index:5;
 
   will-change: transform;
-  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1); /* blød landing */
 }
 
-/* SLUT POSITION */
-.logoEnd {
-  transform:translate(130%, 70%) scale(0.14);
+/* SLUTPOSITION (14% i højre bund) */
+.logoEnd{
+  transform:translate(135%, 75%) scale(0.14);
 }
 
 /* OVERLAY */
-.overlay {
+.overlay{
   position:absolute;
   top:0;
   right:-100%;
@@ -48,11 +48,10 @@ body { margin:0; }
   z-index:2;
   transition:right 0.8s ease;
 }
-
-.overlayShow { right:0; }
+.overlayShow{ right:0; }
 
 /* TEXT */
-.textWrap {
+.textWrap{
   position:absolute;
   width:100%;
   height:100%;
@@ -63,52 +62,49 @@ body { margin:0; }
   z-index:3;
 }
 
-.text {
+.text{
   position:absolute;
   color:#fff;
-  font-size:clamp(18px, 4vw, 34px);
+  font-size:clamp(18px,4vw,34px);
   font-weight:bold;
   max-width:90%;
   opacity:0;
 }
 
-/* STANDARD TEKST */
-.fade {
+/* STANDARD */
+.fade{
   animation:fadeScale 2s ease forwards;
 }
-
-@keyframes fadeScale {
-  0% { transform:scale(1.2); opacity:0; }
-  20% { opacity:1; }
-  80% { opacity:1; }
-  100% { opacity:0; }
+@keyframes fadeScale{
+  0%{transform:scale(1.2);opacity:0;}
+  20%{opacity:1;}
+  80%{opacity:1;}
+  100%{opacity:0;}
 }
 
 /* 50 mio */
-.bigText {
+.bigText{
   animation:bigSequence 5.5s ease forwards;
 }
-
-@keyframes bigSequence {
-  0% { opacity:0; transform:scale(1.1); }
-  15% { opacity:1; }
-  65% { opacity:1; }
-  100% { opacity:0; transform:scale(1.6); }
+@keyframes bigSequence{
+  0%{opacity:0;transform:scale(1.1);}
+  15%{opacity:1;}
+  65%{opacity:1;}
+  100%{opacity:0;transform:scale(1.6);}
 }
 
 /* CTA */
-.cta {
-  font-size:clamp(14px, 2.5vw, 20px);
+.cta{
+  font-size:clamp(14px,2.5vw,20px);
   line-height:1.5;
   white-space:pre-line;
   animation:ctaAnim 8s ease forwards;
 }
-
-@keyframes ctaAnim {
-  0% { opacity:0; }
-  10% { opacity:1; }
-  90% { opacity:1; }
-  100% { opacity:0; }
+@keyframes ctaAnim{
+  0%{opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:1;}
+  100%{opacity:0;}
 }
 </style>
 </head>
@@ -116,19 +112,15 @@ body { margin:0; }
 <body>
 
 <div class="banner" id="banner">
-
   <img src="SPAX-logo-NY.jpg" class="logo" id="logo">
-
   <div class="overlay" id="overlay"></div>
   <div class="textWrap" id="wrap"></div>
-
 </div>
 
 <script>
+let timers=[];
 
-let timers = [];
-
-const texts = [
+const texts=[
   "Terrasseskruer",
   "Konstruktionsskruer",
   "Facadeskruer",
@@ -137,23 +129,23 @@ const texts = [
 ];
 
 function clearAll(){
-  timers.forEach(t => clearTimeout(t));
-  timers = [];
+  timers.forEach(t=>clearTimeout(t));
+  timers=[];
 }
 
 function reset(){
-  const wrap = document.getElementById("wrap");
-  const overlay = document.getElementById("overlay");
-  const logo = document.getElementById("logo");
+  const wrap=document.getElementById("wrap");
+  const overlay=document.getElementById("overlay");
+  const logo=document.getElementById("logo");
 
-  wrap.innerHTML = "";
-  overlay.className = "overlay";
+  wrap.innerHTML="";
+  overlay.className="overlay";
 
-  /* reset logo */
-  logo.className = "logo";
-  logo.style.transform = "translate(-50%, -50%) scale(1)";
+  /* 🔥 reset til start (ingen inline styles) */
+  logo.className="logo";
 
-  logo.offsetHeight; // force repaint
+  /* force repaint */
+  logo.offsetHeight;
 }
 
 function start(){
@@ -161,77 +153,75 @@ function start(){
   clearAll();
   reset();
 
-  const logo = document.getElementById("logo");
-  const overlay = document.getElementById("overlay");
+  const logo=document.getElementById("logo");
+  const overlay=document.getElementById("overlay");
 
-  /* LOGO intro (1,5 sek pause) */
+  /* 1. logo står stille i 1,5 sek */
   timers.push(setTimeout(()=>{
+    /* 2. blød landing */
     logo.classList.add("logoEnd");
-  }, 1500));
+  },1500));
 
-  let startDelay = 3200;
-  let delay = 1500;
+  let startDelay=3200;
+  let delay=1500;
 
   texts.forEach((t,i)=>{
-    timers.push(setTimeout(()=>showText(t), startDelay + i*delay));
+    timers.push(setTimeout(()=>showText(t), startDelay+i*delay));
   });
 
   timers.push(setTimeout(()=>{
     overlay.classList.add("overlayShow");
-  }, startDelay + texts.length*delay));
+  }, startDelay+texts.length*delay));
 
   timers.push(setTimeout(()=>{
     showBig("Vi producerer over 50 millioner skruer dagligt.");
-  }, startDelay + texts.length*delay + 800));
+  }, startDelay+texts.length*delay+800));
 
   timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
-  }, startDelay + texts.length*delay + 6500));
+  }, startDelay+texts.length*delay+6500));
 
-  /* LOOP – perfekt timing */
+  /* loop – synkroniseret */
   timers.push(setTimeout(()=>{
     start();
-  }, startDelay + texts.length*delay + 14000));
+  }, startDelay+texts.length*delay+14000));
 }
 
 /* helpers */
 function showText(txt){
-  const wrap = document.getElementById("wrap");
-  const el = document.createElement("div");
-  el.className = "text fade";
-  el.innerText = txt;
-  wrap.innerHTML = "";
+  const wrap=document.getElementById("wrap");
+  const el=document.createElement("div");
+  el.className="text fade";
+  el.innerText=txt;
+  wrap.innerHTML="";
   wrap.appendChild(el);
 }
 
 function showBig(txt){
-  const wrap = document.getElementById("wrap");
-  const el = document.createElement("div");
-  el.className = "text bigText";
-  el.innerText = txt;
-  wrap.innerHTML = "";
+  const wrap=document.getElementById("wrap");
+  const el=document.createElement("div");
+  el.className="text bigText";
+  el.innerText=txt;
+  wrap.innerHTML="";
   wrap.appendChild(el);
 }
 
 function showCTA(txt){
-  const wrap = document.getElementById("wrap");
-  const el = document.createElement("div");
-  el.className = "text cta";
-  el.innerText = txt;
-  wrap.innerHTML = "";
+  const wrap=document.getElementById("wrap");
+  const el=document.createElement("div");
+  el.className="text cta";
+  el.innerText=txt;
+  wrap.innerHTML="";
   wrap.appendChild(el);
 }
 
-/* CLICK */
-window.addEventListener("load", function(){
-
-  document.getElementById("banner").onclick = function(){
-    window.open("https://www.spax.com/sv-sv.html", "_blank");
+/* click + start */
+window.addEventListener("load",()=>{
+  document.getElementById("banner").onclick=function(){
+    window.open("https://www.spax.com/sv-sv.html","_blank");
   };
-
   start();
 });
-
 </script>
 
 </body>
