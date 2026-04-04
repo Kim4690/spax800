@@ -22,29 +22,23 @@ body { margin:0; }
 .logo {
   position:absolute;
   z-index:5;
-  transition: all 1s ease, opacity 0.6s ease;
+  will-change: transform;
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .logoStart {
   width:100%;
   top:50%;
   left:50%;
-  transform:translate(-50%, -50%);
-  opacity:1;
+  transform:translate(-50%, -50%) scale(1);
 }
 
 .logoEnd {
-  width:14%;
-  max-width:130px;
-  min-width:80px;
+  width:100%; /* 👈 behold samme width! */
 
-  right:3%;
-  bottom:7%;
-  top:auto;
-  left:auto;
-
-  transform:none;
-  opacity:1; /* 👈 vigtig */
+  top:50%;
+  left:50%;
+  transform:translate(120%, 60%) scale(0.14); 
 }
 
 /* OVERLAY */
@@ -177,7 +171,7 @@ function start(){
 /* logo animation (ren – uden fade) */
 timers.push(setTimeout(()=>{
   logo.classList.replace("logoStart","logoEnd");
-}, 1500));
+}, 1500)); // 👈 1,5 sek pause
 
   let startDelay = 3500;
   let delay = 1600;
