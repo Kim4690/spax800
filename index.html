@@ -18,7 +18,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* 🔥 LOGO – LANGSOM & SMOOTH */
+/* 🔥 LOGO */
 .logo{
   position:absolute;
   top:50%;
@@ -28,12 +28,22 @@ body { margin:0; }
   transform-origin:center;
   z-index:5;
 
-  transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity:0;
+
+  transition:
+    transform 2.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 2s ease;
 }
 
 /* lille */
 .logoSmall{
   transform:translate(135%, 75%) scale(0.14);
+  opacity:1;
+}
+
+/* synlig */
+.logoVisible{
+  opacity:1;
 }
 
 /* OVERLAY */
@@ -49,7 +59,7 @@ body { margin:0; }
 }
 .overlayShow{ right:0; }
 
-/* TEXT (UÆNDRET) */
+/* TEXT */
 .textWrap{
   position:absolute;
   width:100%;
@@ -71,6 +81,7 @@ body { margin:0; }
   opacity:0;
 }
 
+/* STANDARD */
 .fade{
   animation:fadeScale 2.2s ease forwards;
 }
@@ -82,6 +93,7 @@ body { margin:0; }
   100% { opacity:0; }
 }
 
+/* PRODUKTION */
 .bigText{
   animation:bigSequence 6s ease forwards;
 }
@@ -89,22 +101,17 @@ body { margin:0; }
 @keyframes bigSequence{
   0% { opacity:0; transform:scale(1.2); }
   15% { opacity:1; transform:scale(1); }
-  60% { opacity:1; transform:scale(1); }
+  60% { opacity:1; }
   100% { opacity:0; transform:scale(2); }
 }
 
+/* 🔥 CTA – INGEN FADE */
 .cta{
-  font-size:22px;
+  font-size:36px;
+  font-weight:bold;
   line-height:1.4;
   white-space:pre-line;
-  animation:ctaAnim 8s ease forwards;
-}
-
-@keyframes ctaAnim{
-  0% { opacity:0; transform:scale(1.2); }
-  10% { opacity:1; }
-  90% { opacity:1; }
-  100% { opacity:0; }
+  opacity:1;
 }
 </style>
 </head>
@@ -141,6 +148,7 @@ function clearAll(){
 function reset(){
   wrap.innerHTML="";
   overlay.className="overlay";
+
   logo.className="logo";
   logo.offsetHeight;
 }
@@ -150,12 +158,17 @@ function start(){
   clearAll();
   reset();
 
-  /* 🔥 LOGO NED – LANGSOM */
+  /* 🔥 LOGO FADE IND */
+  setTimeout(()=>{
+    logo.classList.add("logoVisible");
+  },100);
+
+  /* 🔥 STÅ 2,5 SEK */
   timers.push(setTimeout(()=>{
     logo.classList.add("logoSmall");
-  },1500));
+  },2500));
 
-  let startDelay=4200; // længere pga langsom logo
+  let startDelay=5000;
   let delay=2000;
 
   texts.forEach((t,i)=>{
@@ -174,20 +187,18 @@ function start(){
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay+texts.length*delay+7000));
 
-  /* 🔥 LOGO OP – LANGSOM */
+  /* 🔥 LOGO OP IGEN */
   timers.push(setTimeout(()=>{
 
     logo.classList.remove("logoSmall");
 
-    /* vent til logo fylder */
     setTimeout(()=>{
       overlay.classList.remove("overlayShow");
     },2000);
 
-    /* pause */
     setTimeout(()=>{
       start();
-    },1500);
+    },2500);
 
   }, startDelay+texts.length*delay+16000));
 }
