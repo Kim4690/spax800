@@ -174,18 +174,10 @@ function start(){
   const overlay = document.getElementById("overlay");
 
   /* logo intro */
-logo.style.opacity = "1";
-
+/* logo animation (ren – uden fade) */
 timers.push(setTimeout(()=>{
-
-  logo.style.opacity = "0";
-
-  setTimeout(()=>{
-    logo.style.opacity = "1";
-    logo.classList.replace("logoStart","logoEnd");
-  }, 300);
-
-}, 2000));
+  logo.classList.replace("logoStart","logoEnd");
+}, 1500));
 
   let startDelay = 3500;
   let delay = 1600;
