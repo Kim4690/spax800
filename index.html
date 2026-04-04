@@ -34,10 +34,12 @@ body { margin:0; }
     opacity 1.2s ease;
 }
 
+/* lille logo */
 .logoSmall{
   transform:translate(135%, 75%) scale(0.14);
 }
 
+/* skjul */
 .logoFade{
   opacity:0;
 }
@@ -87,29 +89,23 @@ body { margin:0; }
   100%{opacity:0;}
 }
 
-/* 🔥 PRODUKTIONSTEKST – din ønskede version */
+/* PRODUKTION */
 .bigText{
   animation:bigSequence 6.5s ease forwards;
 }
 @keyframes bigSequence{
   0%{opacity:0;transform:scale(1.2);}
   15%{opacity:1;transform:scale(1);}
-  70%{opacity:1;transform:scale(1);}
+  70%{opacity:1;}
   100%{opacity:0;transform:scale(1.8);}
 }
 
-/* 🔥 CTA – mindre + længere */
+/* CTA – INGEN FADE */
 .cta{
   font-size:clamp(14px,2.2vw,18px);
   line-height:1.6;
   white-space:pre-line;
-  animation:ctaAnim 10s ease forwards;
-}
-@keyframes ctaAnim{
-  0%{opacity:0;transform:scale(1.1);}
-  10%{opacity:1;}
-  90%{opacity:1;}
-  100%{opacity:0;}
+  opacity:1;
 }
 </style>
 </head>
@@ -145,7 +141,6 @@ function reset(){
 
   const logo=document.getElementById("logo");
   logo.className="logo";
-
   logo.offsetHeight;
 }
 
@@ -157,7 +152,7 @@ function start(){
   const logo=document.getElementById("logo");
   const overlay=document.getElementById("overlay");
 
-  /* LOGO */
+  /* LOGO → ned */
   timers.push(setTimeout(()=>{
     logo.classList.add("logoFade");
 
@@ -187,15 +182,25 @@ function start(){
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay+texts.length*delay+7500));
 
-  /* LOOP RESET */
+  /* 🔥 LOOP (logo op + overlay væk usynligt) */
   timers.push(setTimeout(()=>{
 
+    /* logo op */
+    logo.classList.remove("logoSmall");
     logo.classList.add("logoFade");
-    overlay.classList.remove("overlayShow");
 
     setTimeout(()=>{
+      logo.classList.remove("logoFade");
+
+      /* overlay fjernes mens logo dækker */
+      overlay.classList.remove("overlayShow");
+
+    },400);
+
+    /* pause hvor logo fylder */
+    setTimeout(()=>{
       start();
-    },700);
+    },1500);
 
   }, startDelay+texts.length*delay+17000));
 }
