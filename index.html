@@ -18,7 +18,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* 🔥 LOGO – KUN SMOOTH */
+/* 🔥 LOGO – LANGSOM & SMOOTH */
 .logo{
   position:absolute;
   top:50%;
@@ -28,17 +28,12 @@ body { margin:0; }
   transform-origin:center;
   z-index:5;
 
-  opacity:1;
-
-  transition:
-    transform 1.8s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 1.8s ease;
+  transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* lille */
 .logoSmall{
   transform:translate(135%, 75%) scale(0.14);
-  opacity:0.9; /* 🔥 aldrig 0 */
 }
 
 /* OVERLAY */
@@ -155,12 +150,12 @@ function start(){
   clearAll();
   reset();
 
-  /* 🔥 LOGO NED (REN OG SMOOTH) */
+  /* 🔥 LOGO NED – LANGSOM */
   timers.push(setTimeout(()=>{
     logo.classList.add("logoSmall");
   },1500));
 
-  let startDelay=3200;
+  let startDelay=4200; // længere pga langsom logo
   let delay=2000;
 
   texts.forEach((t,i)=>{
@@ -179,7 +174,7 @@ function start(){
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay+texts.length*delay+7000));
 
-  /* 🔥 LOGO OP (før overlay fjernes!) */
+  /* 🔥 LOGO OP – LANGSOM */
   timers.push(setTimeout(()=>{
 
     logo.classList.remove("logoSmall");
@@ -187,14 +182,14 @@ function start(){
     /* vent til logo fylder */
     setTimeout(()=>{
       overlay.classList.remove("overlayShow");
-    },1000);
+    },2000);
 
     /* pause */
     setTimeout(()=>{
       start();
     },1500);
 
-  }, startDelay+texts.length*delay+15000));
+  }, startDelay+texts.length*delay+16000));
 }
 
 /* helpers */
