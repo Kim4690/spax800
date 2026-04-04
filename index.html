@@ -18,7 +18,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* 🔥 LOGO */
+/* 🔥 LOGO (KORRIGERET) */
 .logo{
   position:absolute;
   top:50%;
@@ -27,21 +27,23 @@ body { margin:0; }
   transform:translate(-50%, -50%) scale(1);
   transform-origin:center;
   z-index:5;
+
   opacity:1;
 
   transition:
     transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 1.2s ease;
+    opacity 1.6s ease;
 }
 
 /* lille logo */
 .logoSmall{
   transform:translate(135%, 75%) scale(0.14);
+  opacity:1; /* 🔥 vigtigt – forsvinder ikke */
 }
 
-/* fade */
-.logoFade{
-  opacity:0;
+/* KUN let fade (ikke usynlig) */
+.logoSoft{
+  opacity:0.85;
 }
 
 /* OVERLAY */
@@ -90,7 +92,6 @@ body { margin:0; }
   100% { opacity:0; }
 }
 
-/* 🔥 DIN OPRINDELIGE 50 MILL */
 .bigText{
   animation:bigSequence 6s ease forwards;
 }
@@ -102,7 +103,6 @@ body { margin:0; }
   100% { opacity:0; transform:scale(2); }
 }
 
-/* 🔥 CTA – UÆNDRET */
 .cta{
   font-size:22px;
   line-height:1.4;
@@ -116,7 +116,6 @@ body { margin:0; }
   90% { opacity:1; }
   100% { opacity:0; }
 }
-
 </style>
 </head>
 
@@ -162,15 +161,10 @@ function start(){
   clearAll();
   reset();
 
-  /* 🔥 LOGO NED */
+  /* 🔥 LOGO NED (smooth – ingen forsvinden) */
   timers.push(setTimeout(()=>{
-    logo.classList.add("logoFade");
-
-    setTimeout(()=>{
-      logo.classList.remove("logoFade");
-      logo.classList.add("logoSmall");
-    },400);
-
+    logo.classList.add("logoSoft");
+    logo.classList.add("logoSmall");
   },1500));
 
   let startDelay = 3200;
@@ -192,21 +186,16 @@ function start(){
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay + texts.length*delay + 7000));
 
-  /* 🔥 LOGO OP + LOOP */
+  /* 🔥 LOGO OP */
   timers.push(setTimeout(()=>{
 
     logo.classList.remove("logoSmall");
-    logo.classList.add("logoFade");
+    logo.classList.remove("logoSoft");
 
-    setTimeout(()=>{
-      logo.classList.remove("logoFade");
+    /* overlay fjernes mens logo dækker */
+    overlay.classList.remove("overlayShow");
 
-      /* overlay fjernes skjult */
-      overlay.classList.remove("overlayShow");
-
-    },400);
-
-    /* pause med stort logo */
+    /* pause */
     setTimeout(()=>{
       start();
     },1500);
