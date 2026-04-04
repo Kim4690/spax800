@@ -7,7 +7,6 @@
 <style>
 body { margin:0; }
 
-/* BANNER */
 .banner{
   width:100%;
   max-width:620px;
@@ -19,7 +18,7 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* LOGO – kun transform (ingen width/opacity) */
+/* LOGO */
 .logo{
   position:absolute;
   top:50%;
@@ -29,12 +28,12 @@ body { margin:0; }
   z-index:5;
 
   will-change: transform;
-  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1); /* blød landing */
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* SLUTPOSITION (14% i højre bund) */
+/* SLUT */
 .logoEnd{
-  transform:translate(135%, 75%) scale(0.14);
+  transform:translate(130%, 70%) scale(0.14);
 }
 
 /* OVERLAY */
@@ -82,14 +81,14 @@ body { margin:0; }
   100%{opacity:0;}
 }
 
-/* 50 mio */
+/* 🔥 FIXET 50 mio */
 .bigText{
-  animation:bigSequence 5.5s ease forwards;
+  animation:bigSequence 6s ease forwards;
 }
 @keyframes bigSequence{
   0%{opacity:0;transform:scale(1.1);}
-  15%{opacity:1;}
-  65%{opacity:1;}
+  15%{opacity:1;transform:scale(1);}
+  70%{opacity:1;transform:scale(1);}
   100%{opacity:0;transform:scale(1.6);}
 }
 
@@ -118,6 +117,7 @@ body { margin:0; }
 </div>
 
 <script>
+
 let timers=[];
 
 const texts=[
@@ -141,10 +141,7 @@ function reset(){
   wrap.innerHTML="";
   overlay.className="overlay";
 
-  /* 🔥 reset til start (ingen inline styles) */
   logo.className="logo";
-
-  /* force repaint */
   logo.offsetHeight;
 }
 
@@ -156,9 +153,8 @@ function start(){
   const logo=document.getElementById("logo");
   const overlay=document.getElementById("overlay");
 
-  /* 1. logo står stille i 1,5 sek */
+  /* LOGO – står 1,5 sek → glider ned */
   timers.push(setTimeout(()=>{
-    /* 2. blød landing */
     logo.classList.add("logoEnd");
   },1500));
 
@@ -181,7 +177,6 @@ function start(){
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay+texts.length*delay+6500));
 
-  /* loop – synkroniseret */
   timers.push(setTimeout(()=>{
     start();
   }, startDelay+texts.length*delay+14000));
@@ -215,13 +210,13 @@ function showCTA(txt){
   wrap.appendChild(el);
 }
 
-/* click + start */
 window.addEventListener("load",()=>{
   document.getElementById("banner").onclick=function(){
     window.open("https://www.spax.com/sv-sv.html","_blank");
   };
   start();
 });
+
 </script>
 
 </body>
