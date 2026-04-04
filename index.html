@@ -18,27 +18,26 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* 🔥 LOGO (ET ENESTE!) */
+/* 🔥 LOGO – ÉT ELEMENT */
 .logo{
   position:absolute;
   top:50%;
   left:50%;
   width:100%;
+
   transform:translate(-50%, -50%) scale(1);
   transform-origin:center;
+
   z-index:10;
 
-  transition: all 2.8s cubic-bezier(0.25,1,0.5,1);
+  transition: transform 3s cubic-bezier(0.25,1,0.5,1);
 }
 
-/* lille */
+/* 🔥 LILLE (flyttes via transform – IKKE right/bottom) */
 .logoSmall{
-  top:auto;
-  left:auto;
-  right:16px;
-  bottom:16px;
-  width:14%;
-  transform:none;
+  transform:
+    translate(calc(-50% + 270px), calc(-50% + 95px))
+    scale(0.14);
 }
 
 /* OVERLAY */
@@ -76,28 +75,28 @@ body { margin:0; }
   opacity:0;
 }
 
-/* standard */
+/* STANDARD */
 .fade{
   animation:fadeScale 2.2s ease forwards;
 }
 
 @keyframes fadeScale{
-  0%{transform:scale(1.3);opacity:0;}
-  20%{opacity:1;}
-  80%{opacity:1;}
-  100%{opacity:0;}
+  0% { transform:scale(1.3); opacity:0; }
+  20% { opacity:1; }
+  80% { opacity:1; }
+  100% { opacity:0; }
 }
 
-/* 🔥 PRODUKTION – længere visning */
+/* 🔥 DIN OPRINDELIGE */
 .bigText{
-  animation:bigSequence 7.5s ease forwards;
+  animation:bigSequence 6s ease forwards;
 }
 
 @keyframes bigSequence{
-  0%{opacity:0;transform:scale(1.2);}
-  15%{opacity:1;transform:scale(1);}
-  75%{opacity:1;}
-  100%{opacity:0;transform:scale(2);}
+  0% { opacity:0; transform:scale(1.2); }
+  15% { opacity:1; transform:scale(1); }
+  60% { opacity:1; transform:scale(1); }
+  100% { opacity:0; transform:scale(2); }
 }
 
 /* CTA */
@@ -160,46 +159,39 @@ function start(){
   let startDelay=5000;
   let delay=2000;
 
-  /* ord */
   texts.forEach((t,i)=>{
-    timers.push(setTimeout(()=>{
-      showText(t);
-    }, startDelay + i*delay));
+    timers.push(setTimeout(()=>showText(t), startDelay+i*delay));
   });
 
-  /* overlay */
   let afterWords = startDelay + texts.length*delay;
 
   timers.push(setTimeout(()=>{
     overlay.classList.add("overlayShow");
   }, afterWords));
 
-  /* produktion */
   timers.push(setTimeout(()=>{
     showBig("Vi producerer over 50 millioner skruer dagligt.");
   }, afterWords + 800));
 
-  /* CTA (senere så den ikke cutter) */
   timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
-  }, afterWords + 9000));
+  }, afterWords + 7500));
 
-  /* 🔥 LOGO OP (blødt) */
+  /* 🔥 LOGO OP (SAMME ELEMENT – FRA HJØRNET) */
   timers.push(setTimeout(()=>{
 
     logo.classList.remove("logoSmall");
 
-    /* overlay fjernes først når logo fylder */
+    /* overlay fjernes først når logo er stort */
     setTimeout(()=>{
       overlay.classList.remove("overlayShow");
     },2000);
 
-    /* pause med stort logo */
     setTimeout(()=>{
       start();
     },2500);
 
-  }, afterWords + 15000));
+  }, afterWords + 14000));
 }
 
 /* helpers */
