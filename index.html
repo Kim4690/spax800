@@ -2,15 +2,16 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=620, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body { margin:0; }
 
+/* BANNER */
 .banner {
-  width:100%;          /* 👈 vigtig */
+  width:100%;
   max-width:620px;
-  aspect-ratio: 620 / 200;  /* 👈 vigtig */
+  aspect-ratio:620 / 200;
   position:relative;
   overflow:hidden;
   font-family:Arial, sans-serif;
@@ -18,27 +19,22 @@ body { margin:0; }
   background:url('bg.jpg') center/cover no-repeat;
 }
 
-/* LOGO */
+/* LOGO (smooth GPU animation) */
 .logo {
   position:absolute;
+  top:50%;
+  left:50%;
+  width:100%;
+  transform:translate(-50%, -50%) scale(1);
   z-index:5;
+
   will-change: transform;
   transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.logoStart {
-  width:100%;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%) scale(1);
-}
-
+/* SLUT POSITION */
 .logoEnd {
-  width:100%; /* 👈 behold samme width! */
-
-  top:50%;
-  left:50%;
-  transform:translate(120%, 60%) scale(0.14); 
+  transform:translate(130%, 70%) scale(0.14);
 }
 
 /* OVERLAY */
@@ -70,20 +66,19 @@ body { margin:0; }
 .text {
   position:absolute;
   color:#fff;
-  font-size:34px;
+  font-size:clamp(18px, 4vw, 34px);
   font-weight:bold;
-  max-width:520px;
-  padding:0 20px;
+  max-width:90%;
   opacity:0;
 }
 
-/* STANDARD */
+/* STANDARD TEKST */
 .fade {
   animation:fadeScale 2s ease forwards;
 }
 
 @keyframes fadeScale {
-  0% { transform:scale(1.3); opacity:0; }
+  0% { transform:scale(1.2); opacity:0; }
   20% { opacity:1; }
   80% { opacity:1; }
   100% { opacity:0; }
@@ -95,17 +90,17 @@ body { margin:0; }
 }
 
 @keyframes bigSequence {
-  0% { opacity:0; transform:scale(1.2); }
-  15% { opacity:1; transform:scale(1); }
-  65% { opacity:1; transform:scale(1); }
-  100% { opacity:0; transform:scale(2); }
+  0% { opacity:0; transform:scale(1.1); }
+  15% { opacity:1; }
+  65% { opacity:1; }
+  100% { opacity:0; transform:scale(1.6); }
 }
 
 /* CTA */
 .cta {
-  font-size:20px;
+  font-size:clamp(14px, 2.5vw, 20px);
   line-height:1.5;
-  white-space: pre-line;
+  white-space:pre-line;
   animation:ctaAnim 8s ease forwards;
 }
 
@@ -115,7 +110,6 @@ body { margin:0; }
   90% { opacity:1; }
   100% { opacity:0; }
 }
-
 </style>
 </head>
 
@@ -123,7 +117,8 @@ body { margin:0; }
 
 <div class="banner" id="banner">
 
-  <img src="SPAX-logo-NY.jpg" class="logo logoStart" id="logo">
+  <img src="SPAX-logo-NY.jpg" class="logo" id="logo">
+
   <div class="overlay" id="overlay"></div>
   <div class="textWrap" id="wrap"></div>
 
@@ -134,7 +129,6 @@ body { margin:0; }
 let timers = [];
 
 const texts = [
-  "Tyske kvalitetsskruer",
   "Terrasseskruer",
   "Konstruktionsskruer",
   "Facadeskruer",
@@ -154,9 +148,12 @@ function reset(){
 
   wrap.innerHTML = "";
   overlay.className = "overlay";
-  logo.className = "logo logoStart";
 
-  logo.offsetHeight;
+  /* reset logo */
+  logo.className = "logo";
+  logo.style.transform = "translate(-50%, -50%) scale(1)";
+
+  logo.offsetHeight; // force repaint
 }
 
 function start(){
@@ -167,14 +164,13 @@ function start(){
   const logo = document.getElementById("logo");
   const overlay = document.getElementById("overlay");
 
-  /* logo intro */
-/* logo animation (ren – uden fade) */
-timers.push(setTimeout(()=>{
-  logo.classList.replace("logoStart","logoEnd");
-}, 1500)); // 👈 1,5 sek pause
+  /* LOGO intro (1,5 sek pause) */
+  timers.push(setTimeout(()=>{
+    logo.classList.add("logoEnd");
+  }, 1500));
 
-  let startDelay = 3500;
-  let delay = 1600;
+  let startDelay = 3200;
+  let delay = 1500;
 
   texts.forEach((t,i)=>{
     timers.push(setTimeout(()=>showText(t), startDelay + i*delay));
@@ -192,6 +188,7 @@ timers.push(setTimeout(()=>{
     showCTA("Vil du forhandle SPAX,\nkontakt Søren Dagø på 51 23 31 50\nsoren.dago@spax.com - www.spax.com");
   }, startDelay + texts.length*delay + 6500));
 
+  /* LOOP – perfekt timing */
   timers.push(setTimeout(()=>{
     start();
   }, startDelay + texts.length*delay + 14000));
@@ -225,12 +222,10 @@ function showCTA(txt){
   wrap.appendChild(el);
 }
 
-/* klik + start */
+/* CLICK */
 window.addEventListener("load", function(){
 
-  const banner = document.getElementById("banner");
-
-  banner.onclick = function(){
+  document.getElementById("banner").onclick = function(){
     window.open("https://www.spax.com/sv-sv.html", "_blank");
   };
 
